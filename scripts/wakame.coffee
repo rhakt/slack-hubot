@@ -5,7 +5,7 @@
 #   None
 #
 # Commands:
-#   wakame - wakame
+#   wakame - awesome wakame
 #
 # Author:
 #   a
@@ -16,3 +16,4 @@ module.exports = (robot) ->
 
   robot.hear /wakame/i, (res) ->
     res.send "#{res.random wakame_list}わかめ"
+
