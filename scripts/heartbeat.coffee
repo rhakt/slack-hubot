@@ -5,7 +5,7 @@
 https = require 'https'
 
 module.exports = (robot)->
-  interval = 1000 * 60 * 60 * 60;
+  interval = 1000 * 60 * 60;
 
   heartbeat = ()->
     url = process.env.HUBOT_HEROKU_KEEPALIVE_URL
