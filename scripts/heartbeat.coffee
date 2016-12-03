@@ -13,5 +13,5 @@ module.exports = (robot)->
     ()->
       https.get opt, (res)->
         console.log "HEARTBEAT: #{url} [#{res.statusCode}]"
-
-  hb_id = setInterval heartbeat(), interval
+  
+  #hb_id = setInterval heartbeat(), interval
