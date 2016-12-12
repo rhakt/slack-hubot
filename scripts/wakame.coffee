@@ -17,3 +17,6 @@ module.exports = (robot) ->
   robot.hear /wakame/i, (res) ->
     res.send "#{res.random wakame_list}わかめ"
 
+  robot.respond /wave/i, (res)->
+  	res.send ":parrotwave1: :parrotwave2: :parrotwave3: :parrotwave4: :parrotwave5: :parrotwave6: :parrotwave7:"
+
