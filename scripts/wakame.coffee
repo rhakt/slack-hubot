@@ -6,10 +6,13 @@
 #
 # Commands:
 #   wakame - awesome wakame
-#   wave - parrotwave
+#   image - parrot.png
 #
 # Author:
 #   a
+
+path = require 'path'
+
 
 module.exports = (robot) ->
   
@@ -18,6 +21,6 @@ module.exports = (robot) ->
   robot.hear /wakame/i, (res) ->
     res.send "#{res.random wakame_list}わかめ"
 
-  robot.respond /wave/i, (res)->
-  	res.send ":parrotwave1: :parrotwave2: :parrotwave3: :parrotwave4: :parrotwave5:"
+  robot.respond /image/i, (res)->
+  	res.send "#{path.join(process.env.HUBOT_HEROKU_URL, 'image', 'parrot.png'}"
 
