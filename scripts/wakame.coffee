@@ -12,6 +12,7 @@
 #   a
 
 url = require 'url'
+path = require 'path'
 
 
 module.exports = (robot) ->
@@ -22,5 +23,5 @@ module.exports = (robot) ->
     res.send "#{res.random wakame_list}わかめ"
 
   robot.respond /image/i, (res)->
-  	res.send "#{url.resolve(process.env.HUBOT_HEROKU_URL, 'image', 'parrot.png')}"
+  	res.send "#{url.resolve(process.env.HUBOT_HEROKU_URL, path.join('image', 'parrot.png'))}"
 
