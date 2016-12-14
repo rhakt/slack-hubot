@@ -22,5 +22,5 @@ module.exports = (robot) ->
     res.send "#{res.random wakame_list}わかめ"
 
   robot.respond /image/i, (res)->
-  	res.send "#{path.join(process.env.HUBOT_HEROKU_URL, 'image', 'parrot.png'}"
+  	res.send "#{path.join(process.env.HUBOT_HEROKU_URL, 'image', 'parrot.png')}"
 
