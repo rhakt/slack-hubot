@@ -41,7 +41,7 @@ module.exports = (robot) ->
 
   robot.hear /卒論/g, (res)->
     d = timediff new Date(), new Date(LIMIT.thesis)
-    res.send emojideco "fastparrot", "卒論まであと#{d}日！"
+    res.send emojideco "fastparrot", "卒論まであと#{d}日"
 
   robot.hear /wakame/i, (res) ->
     res.send "#{res.random WAKAME.list}わかめ"
