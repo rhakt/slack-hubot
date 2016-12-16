@@ -17,11 +17,19 @@ path = require 'path'
 urljoin = require 'url-join'
 
 # util
+deleteRequireCache = (name)->
+  file = require.resolve name
+  if require.cache[file]?
+    delete require.cache[file]
+
 DATA_PATH = '../data'
-loadData = (name)-> require path.join DATA_PATH, name
+loadData = (name, reload)->
+  deleteRequireCache name if reload
+  require path.join DATA_PATH, name
 
 LIB_PATH = '../lib'
-loadLib = (name)-> require path.join LIB_PATH, name
+loadLib = (name)->
+  require path.join LIB_PATH, name
 
 # my module
 timediff = loadLib 'timediff'
