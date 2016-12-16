@@ -11,15 +11,33 @@
 # Author:
 #   a
 
+
 qs = require 'querystring'
+path = require 'path'
 urljoin = require 'url-join'
 
-WAKAME = require '../data/wakame'
+# util
+DATA_PATH = '../data'
+loadData = (name)-> require path.join DATA_PATH, name
+
+LIB_PATH = '../lib'
+loadLib = (name)-> require path.join LIB_PATH, name
+
+# my module
+timediff = loadLib 'timediff'
+
+# data
+WAKAME = loadData 'wakame'
+LIMIT = loadData 'limit'
 
 
 module.exports = (robot) ->
 
   ADDRESS = process.env.HUBOT_HEROKU_URL or 'http://localhost:8080'
+
+  robot.hear /卒論/g, (res)->
+    d = timediff new Date(), new Date(LIMIT.thesis)
+    res.send "卒論まであと#{d}日！"
 
   robot.hear /wakame/i, (res) ->
     res.send "#{res.random WAKAME.list}わかめ"
