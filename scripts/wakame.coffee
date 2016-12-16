@@ -1,5 +1,5 @@
 # Description:
-#   
+#
 #
 # Dependencies:
 #   None
@@ -11,17 +11,20 @@
 # Author:
 #   a
 
-url = require 'url'
-path = require 'path'
+qs = require 'querystring'
+urljoin = require 'url-join'
+
+WAKAME = require '../data/wakame'
 
 
 module.exports = (robot) ->
-  
-  wakame_list = ["増える", "動く", "走る", "歩く", "驚く", "靡く", "叫ぶ", "減る", "飛ぶ", "干からびる", "潤う", "弾ける", "爆ぜる", "伸びる", "縮む", "キレる", "跳ねる", "輝く", "光る", "収斂する", "躍動する", "落ち込む", "暴れる", "消える", "生きる", "食べる", "飲む", "踊る"]
+
+  ADDRESS = process.env.HUBOT_HEROKU_URL or 'http://localhost:8080'
 
   robot.hear /wakame/i, (res) ->
-    res.send "#{res.random wakame_list}わかめ"
+    res.send "#{res.random WAKAME.list}わかめ"
 
   robot.respond /image/i, (res)->
-  	res.send "#{url.resolve(process.env.HUBOT_HEROKU_URL, path.join('image', 'parrot.png'))}"
-
+    query = qs.stringify timestamp: new Date().getTime()
+    image_url = urljoin ADDRESS, 'image', "parrot.png?#{query}"
+    res.send image_url
