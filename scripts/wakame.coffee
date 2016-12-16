@@ -54,6 +54,21 @@ module.exports = (robot) ->
   robot.hear /^wakame$/i, (res) ->
     res.send "#{res.random WAKAME.list}わかめ"
 
+  robot.hear /.*/g, (res)->
+    return if Math.random() < 0.97
+    res.send res.random [
+      "分かる"
+      "ウケる"
+      "ほんとに〜？"
+      "w"
+      "こんにちは"
+      "ちくわ大明神"
+      "進捗どうですか？"
+      "卒論は大丈夫そうですか...？"
+      "スライド出来ましたか？"
+      "論文読み終わりましたか？"
+    ]
+
   robot.respond /image/i, (res)->
     query = qs.stringify timestamp: new Date().getTime()
     image_url = urljoin ADDRESS, 'image', "parrot.png?#{query}"
