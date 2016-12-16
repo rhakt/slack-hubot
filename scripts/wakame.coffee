@@ -31,13 +31,17 @@ WAKAME = loadData 'wakame'
 LIMIT = loadData 'limit'
 
 
+emojideco = (name, message)->
+  ":#{name}: #{message} :#{name}:"
+
+
 module.exports = (robot) ->
 
   ADDRESS = process.env.HUBOT_HEROKU_URL or 'http://localhost:8080'
 
   robot.hear /卒論/g, (res)->
     d = timediff new Date(), new Date(LIMIT.thesis)
-    res.send "卒論まであと#{d}日！"
+    res.send emojideco "fastparrot", "卒論まであと#{d}日！"
 
   robot.hear /wakame/i, (res) ->
     res.send "#{res.random WAKAME.list}わかめ"
