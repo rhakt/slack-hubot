@@ -45,7 +45,7 @@ emojideco = (name, message)->
 
 module.exports = (robot) ->
 
-  ADDRESS = process.env.HUBOT_HEROKU_URL or 'http://localhost:8080'
+  ADDRESS = process.env.HUBOT_SERVER_ADDRESS or 'http://localhost:8080'
 
   robot.hear /^卒論$/g, (res)->
     d = timediff new Date(), new Date(LIMIT.thesis)
