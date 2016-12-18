@@ -47,11 +47,11 @@ module.exports = (robot) ->
 
   ADDRESS = process.env.HUBOT_SERVER_ADDRESS or 'http://localhost:8080'
 
-  robot.hear /^卒論$/g, (res)->
+  robot.hear /卒論$/g, (res)->
     d = timediff new Date(), new Date(LIMIT.thesis)
     res.send emojideco "fastparrot", "卒論まであと#{d}日"
 
-  robot.hear /^wakame$/i, (res) ->
+  robot.hear /wakame$/i, (res) ->
     res.send "#{res.random WAKAME.list}わかめ"
 
   robot.hear /.*/g, (res)->
