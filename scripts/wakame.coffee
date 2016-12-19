@@ -15,6 +15,7 @@
 qs = require 'querystring'
 path = require 'path'
 urljoin = require 'url-join'
+SlackBot = require '../node_modules/hubot-slack/src/bot'
 
 # util
 deleteRequireCache = (name)->
@@ -68,6 +69,22 @@ module.exports = (robot) ->
       "スライド出来ましたか？"
       "論文読み終わりましたか？"
     ]
+
+  robot.respond /echo-rich\s+(.*)/i, (res)->
+    unless robot.adapter instanceof SlackBot
+      res.send "unsurpported. (#{res.match[1]})"
+      return
+    data =
+      content:
+        color: "00ff00"
+        fallback: "Sumally ....."
+        title: "Title...."
+        text: "#{res.match[1]}"
+        mrkdwn_in: ["text"]
+      channel: msg.envelope.room
+      username: "partyparrot"
+      icon_emoji: ":fastparrot:"
+    robot.emit 'slack.attachment', data
 
   robot.respond /image/i, (res)->
     query = qs.stringify timestamp: new Date().getTime()
