@@ -79,6 +79,7 @@ module.exports = (robot) ->
         color: "00ff00"
         fallback: "Sumally ....."
         title: "Title...."
+        title_link: urljoin ADDRESS, 'image', "parrot.png"
         text: "#{res.match[1]}"
         mrkdwn_in: ["text"]
       channel: res.envelope.room
