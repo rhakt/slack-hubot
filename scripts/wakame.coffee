@@ -81,7 +81,7 @@ module.exports = (robot) ->
         title: "Title...."
         text: "#{res.match[1]}"
         mrkdwn_in: ["text"]
-      channel: msg.envelope.room
+      channel: res.envelope.room
       username: "partyparrot"
       icon_emoji: ":fastparrot:"
     robot.emit 'slack.attachment', data
