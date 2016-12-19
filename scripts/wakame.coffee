@@ -83,7 +83,7 @@ module.exports = (robot) ->
         title_link: urljoin ADDRESS, 'image', "parrot.png"
         text: "#{res.match[1]}"
         mrkdwn_in: ["text"]
-        channel: res.envelope.room
+      channel: res.envelope.room
     robot.emit 'slack.attachment', data
 
   robot.respond /image/i, (res)->
