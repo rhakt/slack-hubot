@@ -15,6 +15,7 @@
 qs = require 'querystring'
 path = require 'path'
 urljoin = require 'url-join'
+slack = require 'hubot-slack'
 SlackBot = require '../node_modules/hubot-slack/src/bot'
 
 # util
@@ -74,17 +75,49 @@ module.exports = (robot) ->
     unless robot.adapter instanceof SlackBot
       res.send "unsurpported. (#{res.match[1]})"
       return
-    data =
-      content:
-        pretext: 'a'
-        color: "00ff00"
-        fallback: "Sumally ....."
-        title: "Title...."
-        title_link: urljoin ADDRESS, 'image', "parrot.png"
-        text: "#{res.match[1]}"
-        mrkdwn_in: ["text"]
-      channel: res.envelope.room
-    robot.emit 'slack.attachment', data
+    
+    room = res.envelope.room
+    timestamp = new Date/1000|0
+
+    # https://api.slack.com/docs/message-attachments
+    attachments = [
+      {
+        fallback: 'nya-nwanwanpao-n',
+        color: 'good',
+        pretext: "#{res.match[1]}",
+        fields: [
+          {
+            title: 'neko',
+            value: 'nya-n',
+            short: false
+          }
+          {
+            title: 'zou',
+            value: 'pao-n',
+            short: true
+          },
+          {
+            title: 'inu',
+            value: 'wanwan',
+            short: true
+          },
+          {
+            title: 'popopopopopopopo',
+            value: '12323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323123231232312323',
+            short: false
+          }
+        ],
+        footer: 'hubot',
+        footer_icon: 'https://hubot.github.com/assets/images/layout/hubot-avatar@2x.png',
+        ts: timestamp
+      }
+    ]
+
+    options = { as_user: true, link_names: 1, attachments: attachments }
+
+    client = robot.adapter.client
+    client.web.chat.postMessage(room, '', options)
+
 
   robot.respond /image/i, (res)->
     query = qs.stringify timestamp: new Date().getTime()
