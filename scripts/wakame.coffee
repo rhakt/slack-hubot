@@ -72,6 +72,15 @@ module.exports = (robot) ->
       "論文読み終わりましたか？"
     ]
 
+  robot.hear /金曜日/g, (res)->
+    text = """
+:aussiereversecongaparrot::aussiereversecongaparrot::aussiereversecongaparrot::aussiereversecongaparrot::aussiereversecongaparrot::aussiereversecongaparrot::aussiereversecongaparrot::aussiereversecongaparrot:
+:fastparrot::fastparrot::fastparrot: 華金 :fastparrot::fastparrot::fastparrot:
+:congaparrot::congaparrot::congaparrot::congaparrot::congaparrot::congaparrot::congaparrot::congaparrot:
+    """
+    res.send text
+
+
   robot.respond /echo-rich\s+(.*)/i, (res)->
     unless robot.adapter instanceof SlackBot
       res.send "unsurpported. (#{res.match[1]})"
