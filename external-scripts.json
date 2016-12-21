@@ -1,5 +1,6 @@
 [
   "hubot-help",
   "hubot-diagnostics",
-  "hubot-heroku-keepalive"
+  "hubot-heroku-keepalive",
+  "hubot-slack-attachment"
 ]
