@@ -15,7 +15,8 @@
 qs = require 'querystring'
 path = require 'path'
 urljoin = require 'url-join'
-slack = require 'hubot-slack'
+
+# この書き方はバカ
 SlackBot = require '../node_modules/hubot-slack/src/bot'
 
 # util
@@ -75,7 +76,7 @@ module.exports = (robot) ->
     unless robot.adapter instanceof SlackBot
       res.send "unsurpported. (#{res.match[1]})"
       return
-    
+
     room = res.envelope.room
     timestamp = new Date/1000|0
 
