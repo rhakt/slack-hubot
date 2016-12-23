@@ -94,21 +94,28 @@ module.exports = (robot) ->
     at1 = ut.generateAttachment color,
       pretext: res.match[1]
       fields: []
-
-    at1.fields.push
-      title: 'parrot :parrot:'
-      value: ut.random WAKAME.random
-      short: false
-
-    at2 = ut.generateAttachment "#3AA3E3",
       text: ut.emojideco 'wakame or random', 'fastparrot'
       callback_id: "button_test"
       actions: []
       footer: 'hubot'
       footer_icon: urljoin ADDRESS, 'image', "octicons_commit.png"
 
-    at2.actions.push ut.generateButton "wakame", "wakame"
-    at2.actions.push ut.generateButton "random", "random",
+    at1.fields.push
+      title: 'parrot :parrot:'
+      value: ut.random WAKAME.random
+      short: false
+
+    ###
+    at2 = ut.generateAttachment "#3AA3E3",
+      text: ut.emojideco 'wakame or random', 'fastparrot'
+      callback_id: "button_test"
+      actions: []
+      footer: 'hubot'
+      footer_icon: urljoin ADDRESS, 'image', "octicons_commit.png"
+    ###
+
+    at1.actions.push ut.generateButton "wakame", "wakame"
+    at1.actions.push ut.generateButton "random", "random",
       style: "danger"
       confirm:
         title: "Are you sure?"
@@ -116,7 +123,7 @@ module.exports = (robot) ->
         ok_text: "Yes"
         dismiss_text: "No"
 
-    ut.sendAttachment res.envelope.room, [at1, at2]
+    ut.sendAttachment res.envelope.room, [at1]
 
   interactiveMessagesListen "button_test", (user, channel, action, text)->
     message = switch action.value
