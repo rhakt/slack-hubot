@@ -110,7 +110,6 @@ module.exports = (robot) ->
             value: "wakame"
           }
         ]
-        response_url: urljoin ADDRESS, 'slack', "button_test"
       }
     ]
     options = { as_user: true, link_names: 1, attachments: attachments }
