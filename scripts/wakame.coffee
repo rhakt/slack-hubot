@@ -77,7 +77,7 @@ module.exports = (robot) ->
       return
 
     room = res.envelope.room
-    #timestamp = new Date/1000|0
+    timestamp = new Date/1000|0
     query = qs.stringify timestamp: new Date().getTime()
 
     # https://api.slack.com/docs/message-attachments
@@ -95,8 +95,8 @@ module.exports = (robot) ->
         ],
         image_url: urljoin ADDRESS, 'image', "parrot.png?#{query}",
         footer: 'hubot',
-        footer_icon: 'https://hubot.github.com/assets/images/layout/hubot-avatar@2x.png'
-        #ts: timestamp
+        footer_icon: 'https://hubot.github.com/assets/images/layout/hubot-avatar@2x.png',
+        ts: timestamp
       }
     ]
 
