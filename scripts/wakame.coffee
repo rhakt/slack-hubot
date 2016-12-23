@@ -57,7 +57,7 @@ module.exports = (robot) ->
       func = actionListener[content.callback_id]
       return unless func
       idx = parseInt content.attachment_id
-      text = content.original_message.attachments[idx - 1].text
+      text = content.original_message.attachments[idx - 1].text ? ""
       res.end func content.user, content.channel, content.actions[0], text
     (callback_id, callback)-> actionListener[callback_id] = callback
 
@@ -94,9 +94,6 @@ module.exports = (robot) ->
     at1 = ut.generateAttachment color,
       pretext: res.match[1]
       fields: []
-      text: ut.emojideco 'wakame or random', 'fastparrot'
-      callback_id: "button_test"
-      actions: []
       footer: 'hubot'
       footer_icon: urljoin ADDRESS, 'image', "octicons_commit.png"
 
@@ -105,17 +102,15 @@ module.exports = (robot) ->
       value: ut.random WAKAME.random
       short: false
 
-    ###
     at2 = ut.generateAttachment "#3AA3E3",
       text: ut.emojideco 'wakame or random', 'fastparrot'
       callback_id: "button_test"
       actions: []
       footer: 'hubot'
       footer_icon: urljoin ADDRESS, 'image', "octicons_commit.png"
-    ###
 
-    at1.actions.push ut.generateButton "wakame", "wakame"
-    at1.actions.push ut.generateButton "random", "random",
+    at2.actions.push ut.generateButton "wakame", "wakame"
+    at2.actions.push ut.generateButton "random", "random",
       style: "danger"
       confirm:
         title: "Are you sure?"
@@ -123,7 +118,7 @@ module.exports = (robot) ->
         ok_text: "Yes"
         dismiss_text: "No"
 
-    ut.sendAttachment res.envelope.room, [at1]
+    ut.sendAttachment res.envelope.room, [at1, at2]
 
   interactiveMessagesListen "button_test", (user, channel, action, text)->
     message = switch action.value
