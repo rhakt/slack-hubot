@@ -125,14 +125,15 @@ module.exports = (robot) ->
 
   robot.router.post "/slack/action", (req, res) ->
     console.log req.body
-
-    user = req.body.user.name
-    channel = req.body.channel.id
+    content = JSON.stringify req.body.payload
+    console.log content
+    user = content.user.name
+    channel = content.channel.id
     message = ut.random WAKAME.list
 
     envelope = {}
     envelope.user = {}
     envelope.user.room = envelope.room = channel
-    envelope.user.type = query.type or 'groupchat'
+    envelope.user.type = 'groupchat'
     robot.send envelope, "@#{user} #{message}"
     res.end "send to #{room}@#{user}: #{message}"
