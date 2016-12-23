@@ -90,16 +90,14 @@ module.exports = (robot) ->
   actionListener = {}
   robot.router.post "/slack/action", (req, res) ->
     content = JSON.parse req.body.payload
-    console.log content
     for own cid, func of actionListener
-      console.log cid
       if cid == content.callback_id
         text = func content.user, content.channel, content.actions
         res.end text
         return
 
   interactiveMessagesListen = (callback_id, callback)->
-    actionListener.callback_id = callback
+    actionListener["callback_id"] = callback
 
 
   robot.hear /卒論$/g, (res)->
@@ -150,6 +148,7 @@ module.exports = (robot) ->
     at2.actions = []
     at2.actions.push generateButton "wakame", "wakame"
     at2.actions.push generateButton "random", "randome",
+      style: "danger"
       confirm:
         title: "Are you sure?"
         text: "卒論は大丈夫そうですか...？"
