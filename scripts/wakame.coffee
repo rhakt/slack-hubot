@@ -1,5 +1,5 @@
 # Description:
-#
+#   a
 #
 # Dependencies:
 #   None
@@ -9,7 +9,7 @@
 #   hubot image - parrot.png
 #   卒論 - 卒論まであと...
 #   金曜日 - 華金
-#   choice - wakame or random
+#   hubot choice - wakame or random
 #
 # Author:
 #   a
@@ -115,6 +115,7 @@ module.exports = (robot) ->
         text: "卒論は大丈夫そうですか...？"
         ok_text: "Yes"
         dismiss_text: "No"
+
     ut.sendAttachment res.envelope.room, [at1, at2]
 
   interactiveMessagesListen "button_test", (user, channel, action, text)->
@@ -123,4 +124,4 @@ module.exports = (robot) ->
         when "random" then "#{ut.random WAKAME.random}"
         else "unknown value: #{act.value}"
     ut.say channel.id, "@#{user.name} #{message}"
-    return "#{text} => #{user.name} choice #{action.name}"
+    "#{text} => #{user.name} choice #{action.name}"
