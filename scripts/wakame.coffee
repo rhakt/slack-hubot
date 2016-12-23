@@ -37,6 +37,7 @@ loadLib = (name)->
 
 # my module
 timediff = loadLib 'timediff'
+ut = loadLib 'util'
 
 # data
 WAKAME = loadData 'wakame'
@@ -117,8 +118,20 @@ module.exports = (robot) ->
     client = robot.adapter.client
     client.web.chat.postMessage(room, '', options)
 
-
   robot.respond /image/i, (res)->
     query = qs.stringify timestamp: new Date().getTime()
     image_url = urljoin ADDRESS, 'image', "parrot.png?#{query}"
     res.send image_url
+
+  robot.router.post "/slack/action", (req, res) ->
+    console.log req.body
+
+    user = req.body.user.name
+    channel = req.body.channel.id
+    message = ut.random WAKAME.list
+
+    envelope = {}
+    envelope.user = {}
+    envelope.user.room = envelope.room = channel
+    envelope.user.type = query.type or 'groupchat'
+    robot.send envelope, "@#{user} #{message}"
