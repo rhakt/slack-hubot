@@ -123,7 +123,7 @@ module.exports = (robot) ->
     image_url = urljoin ADDRESS, 'image', "parrot.png?#{query}"
     res.send image_url
 
-  robot.respond /choice\s+([^\s]*)/i, (res)->
+  robot.respond /choice\s*([^\s]*)/i, (res)->
     unless robot.adapter instanceof SlackBot
       res.send "unsurpported. (#{res.match[1]})"
       return
