@@ -92,7 +92,7 @@ module.exports = (robot) ->
     for own cid, func of actionListener
       if cid == content.callback_id
         idx = parseInt content.attachment_id
-        text = context.original_message.attachments[idx - 1].text
+        text = content.original_message.attachments[idx - 1].text
         text = func content.user, content.channel, content.actions[0], text
         res.end text
         return
