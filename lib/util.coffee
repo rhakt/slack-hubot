@@ -12,7 +12,7 @@ module.exports = (robot)->
 
   obj.generateAttachment = (color, extra={})->
     #timestamp = new Date/1000 | 0
-    obj =
+    option =
       fallback: 'fallback text'
       color: color
       #ts: timestamp
