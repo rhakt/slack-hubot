@@ -109,6 +109,18 @@ module.exports = (robot) ->
             text: "wakame"
             type: "button"
             value: "wakame"
+          },
+          {
+            name: "random"
+            text: "random"
+            style: "danger"
+            type: "button"
+            value: "random"
+            confirm:
+              title: "Are you sure?"
+              text: "卒論は大丈夫そうですか...？"
+              ok_text: "Yes"
+              dismiss_text: "No"
           }
         ]
       }
@@ -124,16 +136,25 @@ module.exports = (robot) ->
     res.send image_url
 
   robot.router.post "/slack/action", (req, res) ->
-    console.log req.body
     content = JSON.parse req.body.payload
     console.log content
     user = content.user.name
     channel = content.channel.id
-    message = ut.random WAKAME.list
+    actions = content.actions
+    message = ""
+    for act in actions
+      s = switch act.value
+        when "wakame"
+          "#{ut.random WAKAME.list}わかめ"
+        when "random"
+          "#{ut.random WAKAME.random}"
+        else
+          "unknown value: #{act.value}"
+      message += "#{s}\n"
 
     envelope = {}
     envelope.user = {}
     envelope.user.room = envelope.room = channel
     envelope.user.type = 'groupchat'
     robot.send envelope, "@#{user} #{message}"
-    res.end "send to #{room}@#{user}: #{message}"
+    res.end "send to #{content.channel.name}@#{user}: #{message}"
