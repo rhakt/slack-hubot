@@ -93,7 +93,7 @@ module.exports = (robot) ->
           }
         ],
         footer: 'hubot',
-        footer_icon: urljoin(ADDRESS, 'image', "parrot.png"),
+        footer_icon: urljoin(ADDRESS, 'image', "octicons_commit.png"),
         ts: timestamp
       }
     ]
