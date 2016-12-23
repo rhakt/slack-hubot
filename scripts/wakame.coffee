@@ -15,6 +15,7 @@
 qs = require 'querystring'
 path = require 'path'
 urljoin = require 'url-join'
+repeat = require 'repeat-string'
 
 # この書き方はバカ
 SlackBot = require '../node_modules/hubot-slack/src/bot'
@@ -62,10 +63,10 @@ module.exports = (robot) ->
     res.send res.random WAKAME.random
 
   robot.hear /金曜日/g, (res)->
-    header = ":aussiereversecongaparrot:".repeat 8
-    side = ":fastparrot:".repeat 3
+    header = repeat ":aussiereversecongaparrot:", 8
+    side = repeat ":fastparrot:", 3
     content = emojideco side, "華金"
-    footer = ":congaparrot:".repeat 8
+    footer = repeat ":congaparrot:", 8
     text = "#{header}\n#{content}\n#{footer}"
     res.send text
 
