@@ -141,6 +141,7 @@ module.exports = (robot) ->
     user = content.user.name
     channel = content.channel.id
     actions = content.actions
+    original = JSON.stringify content.original_message
     message = ""
     for act in actions
       s = switch act.value
@@ -157,4 +158,4 @@ module.exports = (robot) ->
     envelope.user.room = envelope.room = channel
     envelope.user.type = 'groupchat'
     robot.send envelope, "@#{user} #{message}"
-    res.end "send to #{content.channel.name}@#{user}: #{message}"
+    res.end original
