@@ -83,22 +83,20 @@ module.exports = (robot) ->
     attachments = [
       {
         fallback: 'parrotparrot',
-        color: res.random ['good', 'warning', 'danger', '#439FE0'],
+        color: res.random(['good', 'warning', 'danger', '#439FE0']),
         pretext: "#{res.match[1]}",
         fields: [
           {
             title: 'parrot :parrot:',
-            value: res.random WAKAME.random,
+            value: res.random(WAKAME.random),
             short: false
           }
         ],
         footer: 'hubot',
-        footer_icon: urljoin ADDRESS, 'image', "parrot.png",
+        footer_icon: urljoin(ADDRESS, 'image', "parrot.png"),
         ts: timestamp
       }
     ]
-    console.log attachments
-
     options = { as_user: true, link_names: 1, attachments: attachments }
 
     client = robot.adapter.client
