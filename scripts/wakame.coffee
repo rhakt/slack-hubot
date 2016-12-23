@@ -135,3 +135,4 @@ module.exports = (robot) ->
     envelope.user.room = envelope.room = channel
     envelope.user.type = query.type or 'groupchat'
     robot.send envelope, "@#{user} #{message}"
+    res.end "send to #{room}@#{user}: #{message}"
