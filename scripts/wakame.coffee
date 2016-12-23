@@ -67,8 +67,7 @@ module.exports = (robot) ->
     side = repeat ":fastparrot:", 3
     content = emojideco side, "華金"
     footer = repeat ":congaparrot:", 8
-    text = "#{header}\n#{content}\n#{footer}"
-    res.send text
+    res.send "#{header}\n#{content}\n#{footer}"
 
 
   robot.respond /echo-rich\s+(.*)/i, (res)->
@@ -83,7 +82,7 @@ module.exports = (robot) ->
     # https://api.slack.com/docs/message-attachments
     attachments = [
       {
-        fallback: ':parrot:',
+        fallback: 'parrotparrot',
         color: res.random ['good', 'warning', 'danger', '#439FE0'],
         pretext: "#{res.match[1]}",
         fields: [
@@ -98,6 +97,7 @@ module.exports = (robot) ->
         ts: timestamp
       }
     ]
+    console.log attachments
 
     options = { as_user: true, link_names: 1, attachments: attachments }
 
