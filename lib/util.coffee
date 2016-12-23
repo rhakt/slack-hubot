@@ -10,14 +10,13 @@ module.exports = (robot)->
     emo = _.repeat ":#{name}:", repeat
     "#{emo} #{message} #{emo}"
 
-  obj.generateAttachment = (color, pretext)->
+  obj.generateAttachment = (color, extra={})->
     #timestamp = new Date/1000 | 0
     obj =
       fallback: 'fallback text'
       color: color
       #ts: timestamp
-    obj.pretext = pretext if pretext
-    obj
+    _.extend option, extra
 
   obj.generateButton = (name, value, extra={})->
     option =

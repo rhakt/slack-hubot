@@ -54,7 +54,8 @@ module.exports = (robot) ->
     actionListener = {}
     robot.router.post "/slack/action", (req, res) ->
       content = JSON.parse req.body.payload
-      return unless actionListener[content.callback_id]?
+      func = actionListener[content.callback_id]
+      return unless func
       idx = parseInt content.attachment_id
       text = content.original_message.attachments[idx - 1].text
       res.end func content.user, content.channel, content.actions[0], text
@@ -66,11 +67,11 @@ module.exports = (robot) ->
     res.send ut.emojideco "卒論まであと#{d}日", 'fastparrot'
 
   robot.hear /wakame$/i, (res) ->
-    res.send "#{res.random WAKAME.list}わかめ"
+    res.send "#{ut.random WAKAME.list}わかめ"
 
   robot.hear /.*/g, (res)->
     return if Math.random() < 0.97
-    res.send res.random WAKAME.random
+    res.send ut.random WAKAME.random
 
   robot.hear /金曜日/g, (res)->
     header = _.repeat ":aussiereversecongaparrot:", 8
@@ -89,22 +90,23 @@ module.exports = (robot) ->
       return
 
     # https://api.slack.com/docs/message-attachments
-    color = res.random ['good', 'warning', 'danger', '#439FE0']
-    at1 = ut.generateAttachment color, res.match[1]
-    at1.fields = [
-      {
-        title: 'parrot :parrot:'
-        value: res.random(WAKAME.random)
-        short: false
-      }
-    ]
-    at1.footer = 'hubot'
-    at1.footer_icon = urljoin(ADDRESS, 'image', "octicons_commit.png")
+    color = ut.random ['good', 'warning', 'danger', '#439FE0']
+    at1 = ut.generateAttachment color,
+      pretext: res.match[1]
+      fields: []
+      footer: 'hubot'
+      footer_icon: urljoin ADDRESS, 'image', "octicons_commit.png"
 
-    at2 = ut.generateAttachment "#3AA3E3"
-    at2.text = ut.emojideco 'wakame or random', 'fastparrot'
-    at2.callback_id = "button_test"
-    at2.actions = []
+    at1.fields.push
+      title: 'parrot :parrot:'
+      value: ut.random WAKAME.random
+      short: false
+
+    at2 = ut.generateAttachment "#3AA3E3",
+      text: ut.emojideco 'wakame or random', 'fastparrot'
+      callback_id: "button_test"
+      actions: []
+
     at2.actions.push ut.generateButton "wakame", "wakame"
     at2.actions.push ut.generateButton "random", "random",
       style: "danger"
@@ -122,4 +124,3 @@ module.exports = (robot) ->
         else "unknown value: #{act.value}"
     ut.say channel.id, "@#{user.name} #{message}"
     return "#{text} => #{user.name} choice #{action.name}"
-    #return "send to #{channel.name}@#{user.name}: #{message}"
