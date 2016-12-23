@@ -93,9 +93,8 @@ module.exports = (robot) ->
             short: false
           }
         ],
-        image_url: urljoin ADDRESS, 'image', "parrot.png?#{query}",
         footer: 'hubot',
-        footer_icon: 'https://hubot.github.com/assets/images/layout/hubot-avatar@2x.png',
+        footer_icon: urljoin ADDRESS, 'image', "parrot.png",
         ts: timestamp
       }
     ]
