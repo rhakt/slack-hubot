@@ -15,7 +15,7 @@
 qs = require 'querystring'
 path = require 'path'
 urljoin = require 'url-join'
-repeat = require 'repeat-string'
+_ = require 'lodash'
 
 # この書き方はバカ
 SlackBot = require '../node_modules/hubot-slack/src/bot'
@@ -48,9 +48,57 @@ emojideco = (name, message)->
   "#{name} #{message} #{name}"
 
 
+generateAttachment = (color, pretext)->
+  timestamp = new Date/1000 | 0
+  obj =
+    fallback: 'fallback text'
+    color: res.random(['good', 'warning', 'danger', '#439FE0'])
+    ts: timestamp
+  obj.pretext = pretext if pretext?
+  obj
+
+generateButton = (name, value, extra={})->
+  option =
+    name: name
+    text: name
+    type: "button"
+    value: value
+  _.extend option, extra
+
+
 module.exports = (robot) ->
 
   ADDRESS = process.env.HUBOT_SERVER_ADDRESS or 'http://localhost:8080'
+
+  say = (channel_id, message)->
+    envelope =
+      user:
+        type: 'groupchat'
+        room: channel_id
+      room: channel_id
+    robot.send envelope, message
+
+  sendAttachment = (room, attachments, extra={})->
+    options =
+      as_user: true
+      link_names: 1
+      attachments: attachments
+      response_type: 'ephemeral'
+    options = _.extend options, extra
+    robot.adapter.client.web.chat.postMessage room, '', options
+
+  actionListener = {}
+  robot.router.post "/slack/action", (req, res) ->
+    content = JSON.parse req.body.payload
+    for own cid, func of actionListener
+      if cid == content.callback_id
+        text = func content.user, content.channel, content.actions
+        res.end text
+        return
+
+  interactiveMessagesListen = (callback_id, callback)->
+    actionListener.callback_id = callback
+
 
   robot.hear /卒論$/g, (res)->
     d = timediff new Date(), new Date(LIMIT.thesis)
@@ -64,97 +112,55 @@ module.exports = (robot) ->
     res.send res.random WAKAME.random
 
   robot.hear /金曜日/g, (res)->
-    header = repeat ":aussiereversecongaparrot:", 8
-    side = repeat ":fastparrot:", 3
+    header = _.repeat ":aussiereversecongaparrot:", 8
+    side = _.repeat ":fastparrot:", 3
     content = emojideco side, "華金"
-    footer = repeat ":congaparrot:", 8
+    footer = _.repeat ":congaparrot:", 8
     res.send "#{header}\n#{content}\n#{footer}"
-
-
-  robot.respond /echo-rich\s+(.*)/i, (res)->
-    unless robot.adapter instanceof SlackBot
-      res.send "unsurpported. (#{res.match[1]})"
-      return
-
-    room = res.envelope.room
-    timestamp = new Date/1000|0
-    query = qs.stringify timestamp: new Date().getTime()
-
-    # https://api.slack.com/docs/message-attachments
-    attachments = [
-      {
-        fallback: 'parrotparrot'
-        color: res.random(['good', 'warning', 'danger', '#439FE0'])
-        pretext: "#{res.match[1]}"
-        fields: [
-          {
-            title: 'parrot :parrot:'
-            value: res.random(WAKAME.random)
-            short: false
-          }
-        ]
-        footer: 'hubot'
-        footer_icon: urljoin(ADDRESS, 'image', "octicons_commit.png")
-        ts: timestamp
-      },
-      {
-        fallback: 'button'
-        text: ':fastparrot: party or die :fastparrot:'
-        callback_id: "button_test"
-        color: "#3AA3E3"
-        attachment_type: "default"
-        actions: [
-          {
-            name: "wakame"
-            text: "wakame"
-            type: "button"
-            value: "wakame"
-          },
-          {
-            name: "random"
-            text: "random"
-            style: "danger"
-            type: "button"
-            value: "random"
-            confirm:
-              title: "Are you sure?"
-              text: "卒論は大丈夫そうですか...？"
-              ok_text: "Yes"
-              dismiss_text: "No"
-          }
-        ]
-      }
-    ]
-    options = { as_user: true, link_names: 1, attachments: attachments }
-
-    client = robot.adapter.client
-    client.web.chat.postMessage(room, '', options)
 
   robot.respond /image/i, (res)->
     query = qs.stringify timestamp: new Date().getTime()
     image_url = urljoin ADDRESS, 'image', "parrot.png?#{query}"
     res.send image_url
 
-  robot.router.post "/slack/action", (req, res) ->
-    content = JSON.parse req.body.payload
-    console.log content
-    user = content.user.name
-    channel = content.channel.id
-    actions = content.actions
-    message = ""
-    for act in actions
-      s = switch act.value
-        when "wakame"
-          "#{ut.random WAKAME.list}わかめ"
-        when "random"
-          "#{ut.random WAKAME.random}"
-        else
-          "unknown value: #{act.value}"
-      message += "#{s}\n"
+  robot.respond /echo-rich\s+(.*)/i, (res)->
+    unless robot.adapter instanceof SlackBot
+      res.send "unsurpported. (#{res.match[1]})"
+      return
 
-    envelope = {}
-    envelope.user = {}
-    envelope.user.room = envelope.room = channel
-    envelope.user.type = 'groupchat'
-    robot.send envelope, "@#{user} #{message}"
-    res.end ""
+    query = qs.stringify timestamp: new Date().getTime()
+
+    # https://api.slack.com/docs/message-attachments
+    at1 = generateAttachment res.random(['good', 'warning', 'danger', '#439FE0']), res.match[1]
+    at1.fields = [
+      {
+        title: 'parrot :parrot:'
+        value: res.random(WAKAME.random)
+        short: false
+      }
+    ]
+    at1.footer = 'hubot'
+    at1.footer_icon = urljoin(ADDRESS, 'image', "octicons_commit.png")
+
+    at2 = generateAttachment "#3AA3E3"
+    at2.text = emojideco ':fastparrot:', 'party or die'
+    at2.callback_id = "button_test"
+    at2.actions = []
+    at2.actions.push generateButton "wakame", "wakame"
+    at2.actions.push generateButton "random", "randome",
+      confirm:
+        title: "Are you sure?"
+        text: "卒論は大丈夫そうですか...？"
+        ok_text: "Yes"
+        dismiss_text: "No"
+    sendAttachment res.envelope.room, [at1, at2]
+
+  interactiveMessagesListen "button_test", (user, channel, actions, res)->
+    act2mes = (act)->
+      return switch act.value
+        when "wakame" then "#{ut.random WAKAME.list}わかめ"
+        when "random" then "#{ut.random WAKAME.random}"
+        else "unknown value: #{act.value}"
+    message = _.join _.map(actions, act2mes), '\n'
+    say channel.id, "@#{user.name} #{message}"
+    return "send to #{channel.name}@#{user.name}: #{message}"
