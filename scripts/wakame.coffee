@@ -49,11 +49,11 @@ emojideco = (name, message)->
 
 
 generateAttachment = (color, pretext)->
-  timestamp = new Date/1000 | 0
+  #timestamp = new Date/1000 | 0
   obj =
     fallback: 'fallback text'
     color: ut.random(['good', 'warning', 'danger', '#439FE0'])
-    ts: timestamp
+    #ts: timestamp
   obj.pretext = pretext if pretext?
   obj
 
@@ -90,7 +90,9 @@ module.exports = (robot) ->
   actionListener = {}
   robot.router.post "/slack/action", (req, res) ->
     content = JSON.parse req.body.payload
+    console.log content
     for own cid, func of actionListener
+      console.log cid
       if cid == content.callback_id
         text = func content.user, content.channel, content.actions
         res.end text
@@ -155,12 +157,13 @@ module.exports = (robot) ->
         dismiss_text: "No"
     sendAttachment res.envelope.room, [at1, at2]
 
-  interactiveMessagesListen "button_test", (user, channel, actions, res)->
+  interactiveMessagesListen "button_test", (user, channel, actions)->
     act2mes = (act)->
       return switch act.value
         when "wakame" then "#{ut.random WAKAME.list}わかめ"
         when "random" then "#{ut.random WAKAME.random}"
         else "unknown value: #{act.value}"
     message = _.join _.map(actions, act2mes), '\n'
+    console.log message
     say channel.id, "@#{user.name} #{message}"
     return "send to #{channel.name}@#{user.name}: #{message}"
