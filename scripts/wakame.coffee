@@ -54,7 +54,7 @@ generateAttachment = (color, pretext)->
     fallback: 'fallback text'
     color: ut.random(['good', 'warning', 'danger', '#439FE0'])
     #ts: timestamp
-  obj.pretext = pretext if pretext?
+  obj.pretext = pretext if pretext
   obj
 
 generateButton = (name, value, extra={})->
@@ -123,7 +123,7 @@ module.exports = (robot) ->
     image_url = urljoin ADDRESS, 'image', "parrot.png?#{query}"
     res.send image_url
 
-  robot.respond /echo-rich\s+(.*)/i, (res)->
+  robot.respond /choice\s+([^\s]*)/i, (res)->
     unless robot.adapter instanceof SlackBot
       res.send "unsurpported. (#{res.match[1]})"
       return
