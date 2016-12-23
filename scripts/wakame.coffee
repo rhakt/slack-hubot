@@ -97,7 +97,7 @@ module.exports = (robot) ->
         return
 
   interactiveMessagesListen = (callback_id, callback)->
-    actionListener["callback_id"] = callback
+    actionListener[callback_id] = callback
 
 
   robot.hear /卒論$/g, (res)->
