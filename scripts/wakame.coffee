@@ -125,7 +125,7 @@ module.exports = (robot) ->
 
   robot.router.post "/slack/action", (req, res) ->
     console.log req.body
-    content = JSON.stringify req.body.payload
+    content = JSON.parse req.body.payload
     console.log content
     user = content.user.name
     channel = content.channel.id
