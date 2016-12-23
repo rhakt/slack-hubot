@@ -91,7 +91,9 @@ module.exports = (robot) ->
     content = JSON.parse req.body.payload
     for own cid, func of actionListener
       if cid == content.callback_id
-        text = func content.user, content.channel, content.actions
+        idx = parseInt content.attachment_id
+        text = context.original_message.attachments[idx - 1].text
+        text = func content.user, content.channel, content.actions[0], text
         res.end text
         return
 
@@ -142,7 +144,7 @@ module.exports = (robot) ->
     at1.footer_icon = urljoin(ADDRESS, 'image', "octicons_commit.png")
 
     at2 = generateAttachment "#3AA3E3"
-    at2.text = emojideco ':fastparrot:', 'party or die'
+    at2.text = emojideco ':fastparrot:', 'wakame or random'
     at2.callback_id = "button_test"
     at2.actions = []
     at2.actions.push generateButton "wakame", "wakame"
@@ -155,14 +157,11 @@ module.exports = (robot) ->
         dismiss_text: "No"
     sendAttachment res.envelope.room, [at1, at2]
 
-  interactiveMessagesListen "button_test", (user, channel, actions)->
-    act2mes = (act)->
-      return switch act.value
+  interactiveMessagesListen "button_test", (user, channel, action, text)->
+    message = switch action.value
         when "wakame" then "#{ut.random WAKAME.list}わかめ"
         when "random" then "#{ut.random WAKAME.random}"
         else "unknown value: #{act.value}"
-    message = _.join _.map(actions, act2mes), '\n'
-    console.log message
     say channel.id, "@#{user.name} #{message}"
-    return ""
+    return "#{text} => #{user.name} choice #{action.name}"
     #return "send to #{channel.name}@#{user.name}: #{message}"
