@@ -83,7 +83,6 @@ module.exports = (robot) ->
       as_user: true
       link_names: 1
       attachments: attachments
-      response_type: 'ephemeral'
     options = _.extend options, extra
     robot.adapter.client.web.chat.postMessage room, '', options
 
@@ -165,4 +164,5 @@ module.exports = (robot) ->
     message = _.join _.map(actions, act2mes), '\n'
     console.log message
     say channel.id, "@#{user.name} #{message}"
-    return "send to #{channel.name}@#{user.name}: #{message}"
+    return ""
+    #return "send to #{channel.name}@#{user.name}: #{message}"
