@@ -147,7 +147,7 @@ module.exports = (robot) ->
     at2.callback_id = "button_test"
     at2.actions = []
     at2.actions.push generateButton "wakame", "wakame"
-    at2.actions.push generateButton "random", "randome",
+    at2.actions.push generateButton "random", "random",
       style: "danger"
       confirm:
         title: "Are you sure?"
