@@ -52,7 +52,7 @@ generateAttachment = (color, pretext)->
   timestamp = new Date/1000 | 0
   obj =
     fallback: 'fallback text'
-    color: res.random(['good', 'warning', 'danger', '#439FE0'])
+    color: ut.random(['good', 'warning', 'danger', '#439FE0'])
     ts: timestamp
   obj.pretext = pretext if pretext?
   obj
