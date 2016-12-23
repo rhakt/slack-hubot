@@ -6,7 +6,10 @@
 #
 # Commands:
 #   wakame - awesome wakame
-#   image - parrot.png
+#   hubot image - parrot.png
+#   卒論 - 卒論まであと...
+#   金曜日 - 華金
+#   choice - wakame or random
 #
 # Author:
 #   a
@@ -37,73 +40,30 @@ loadLib = (name)->
 
 # my module
 timediff = loadLib 'timediff'
-ut = loadLib 'util'
 
 # data
 WAKAME = loadData 'wakame'
 LIMIT = loadData 'limit'
 
 
-emojideco = (name, message)->
-  "#{name} #{message} #{name}"
-
-
-generateAttachment = (color, pretext)->
-  #timestamp = new Date/1000 | 0
-  obj =
-    fallback: 'fallback text'
-    color: color
-    #ts: timestamp
-  obj.pretext = pretext if pretext
-  obj
-
-generateButton = (name, value, extra={})->
-  option =
-    name: name
-    text: name
-    type: "button"
-    value: value
-  _.extend option, extra
-
-
 module.exports = (robot) ->
-
+  ut = loadLib('util')(robot)
   ADDRESS = process.env.HUBOT_SERVER_ADDRESS or 'http://localhost:8080'
 
-  say = (channel_id, message)->
-    envelope =
-      user:
-        type: 'groupchat'
-        room: channel_id
-      room: channel_id
-    robot.send envelope, message
-
-  sendAttachment = (room, attachments, extra={})->
-    options =
-      as_user: true
-      link_names: 1
-      attachments: attachments
-    options = _.extend options, extra
-    robot.adapter.client.web.chat.postMessage room, '', options
-
-  actionListener = {}
-  robot.router.post "/slack/action", (req, res) ->
-    content = JSON.parse req.body.payload
-    for own cid, func of actionListener
-      if cid == content.callback_id
-        idx = parseInt content.attachment_id
-        text = content.original_message.attachments[idx - 1].text
-        text = func content.user, content.channel, content.actions[0], text
-        res.end text
-        return
-
-  interactiveMessagesListen = (callback_id, callback)->
-    actionListener[callback_id] = callback
+  interactiveMessagesListen = do ->
+    actionListener = {}
+    robot.router.post "/slack/action", (req, res) ->
+      content = JSON.parse req.body.payload
+      return unless actionListener[content.callback_id]?
+      idx = parseInt content.attachment_id
+      text = content.original_message.attachments[idx - 1].text
+      res.end func content.user, content.channel, content.actions[0], text
+    (callback_id, callback)-> actionListener[callback_id] = callback
 
 
   robot.hear /卒論$/g, (res)->
     d = timediff new Date(), new Date(LIMIT.thesis)
-    res.send emojideco ":fastparrot:", "卒論まであと#{d}日"
+    res.send ut.emojideco "卒論まであと#{d}日", 'fastparrot'
 
   robot.hear /wakame$/i, (res) ->
     res.send "#{res.random WAKAME.list}わかめ"
@@ -114,8 +74,7 @@ module.exports = (robot) ->
 
   robot.hear /金曜日/g, (res)->
     header = _.repeat ":aussiereversecongaparrot:", 8
-    side = _.repeat ":fastparrot:", 3
-    content = emojideco side, "華金"
+    content = ut.emojideco "華金", 'fastparrot', 3
     footer = _.repeat ":congaparrot:", 8
     res.send "#{header}\n#{content}\n#{footer}"
 
@@ -129,10 +88,9 @@ module.exports = (robot) ->
       res.send "unsurpported. (#{res.match[1]})"
       return
 
-    query = qs.stringify timestamp: new Date().getTime()
-
     # https://api.slack.com/docs/message-attachments
-    at1 = generateAttachment res.random(['good', 'warning', 'danger', '#439FE0']), res.match[1]
+    color = res.random ['good', 'warning', 'danger', '#439FE0']
+    at1 = ut.generateAttachment color, res.match[1]
     at1.fields = [
       {
         title: 'parrot :parrot:'
@@ -143,25 +101,25 @@ module.exports = (robot) ->
     at1.footer = 'hubot'
     at1.footer_icon = urljoin(ADDRESS, 'image', "octicons_commit.png")
 
-    at2 = generateAttachment "#3AA3E3"
-    at2.text = emojideco ':fastparrot:', 'wakame or random'
+    at2 = ut.generateAttachment "#3AA3E3"
+    at2.text = ut.emojideco 'wakame or random', 'fastparrot'
     at2.callback_id = "button_test"
     at2.actions = []
-    at2.actions.push generateButton "wakame", "wakame"
-    at2.actions.push generateButton "random", "random",
+    at2.actions.push ut.generateButton "wakame", "wakame"
+    at2.actions.push ut.generateButton "random", "random",
       style: "danger"
       confirm:
         title: "Are you sure?"
         text: "卒論は大丈夫そうですか...？"
         ok_text: "Yes"
         dismiss_text: "No"
-    sendAttachment res.envelope.room, [at1, at2]
+    ut.sendAttachment res.envelope.room, [at1, at2]
 
   interactiveMessagesListen "button_test", (user, channel, action, text)->
     message = switch action.value
         when "wakame" then "#{ut.random WAKAME.list}わかめ"
         when "random" then "#{ut.random WAKAME.random}"
         else "unknown value: #{act.value}"
-    say channel.id, "@#{user.name} #{message}"
+    ut.say channel.id, "@#{user.name} #{message}"
     return "#{text} => #{user.name} choice #{action.name}"
     #return "send to #{channel.name}@#{user.name}: #{message}"
