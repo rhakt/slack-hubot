@@ -82,19 +82,35 @@ module.exports = (robot) ->
     # https://api.slack.com/docs/message-attachments
     attachments = [
       {
-        fallback: 'parrotparrot',
-        color: res.random(['good', 'warning', 'danger', '#439FE0']),
-        pretext: "#{res.match[1]}",
+        fallback: 'parrotparrot'
+        color: res.random(['good', 'warning', 'danger', '#439FE0'])
+        pretext: "#{res.match[1]}"
         fields: [
           {
-            title: 'parrot :parrot:',
-            value: res.random(WAKAME.random),
+            title: 'parrot :parrot:'
+            value: res.random(WAKAME.random)
             short: false
           }
-        ],
-        footer: 'hubot',
-        footer_icon: urljoin(ADDRESS, 'image', "octicons_commit.png"),
+        ]
+        footer: 'hubot'
+        footer_icon: urljoin(ADDRESS, 'image', "octicons_commit.png")
         ts: timestamp
+      },
+      {
+        fallback: 'button'
+        text: ':fastparrot: party or die :fastparrot:'
+        callback_id: "button_test"
+        color: "#3AA3E3"
+        attachment_type: "default"
+        actions: [
+          {
+            name: "wakame"
+            text: "wakame"
+            type: "button"
+            value: "wakame"
+          }
+        ]
+        response_url: urljoin ADDRESS, 'slack', "button_test"
       }
     ]
     options = { as_user: true, link_names: 1, attachments: attachments }
