@@ -94,8 +94,6 @@ module.exports = (robot) ->
     at1 = ut.generateAttachment color,
       pretext: res.match[1]
       fields: []
-      footer: 'hubot'
-      footer_icon: urljoin ADDRESS, 'image', "octicons_commit.png"
 
     at1.fields.push
       title: 'parrot :parrot:'
@@ -106,6 +104,8 @@ module.exports = (robot) ->
       text: ut.emojideco 'wakame or random', 'fastparrot'
       callback_id: "button_test"
       actions: []
+      footer: 'hubot'
+      footer_icon: urljoin ADDRESS, 'image', "octicons_commit.png"
 
     at2.actions.push ut.generateButton "wakame", "wakame"
     at2.actions.push ut.generateButton "random", "random",
