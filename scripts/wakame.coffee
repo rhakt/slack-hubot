@@ -59,7 +59,8 @@ module.exports = (robot) ->
       return unless func
       idx = parseInt content.attachment_id
       text = content.original_message.attachments[idx - 1].text ? ""
-      res.json func content.user, content.channel, content.actions[0], text
+      ret = func content.user, content.channel, content.actions[0], text, content.original_message
+      res.json ret
       delete actionListener[content.callback_id]
     (callback_id, callback)-> actionListener[callback_id] = callback
 
@@ -140,14 +141,17 @@ module.exports = (robot) ->
       ["趣", "random", "danger"],
       ["無", "none"]
     ]
-    at = generateChoice "button_test", "#3AA3E3", text, buttons, (user, channel, action, text)->
+    at = generateChoice "button_test", "#3AA3E3", text, buttons, (user, channel, action, text, original)->
       message = switch action.value
         when "wakame" then "#{ut.random WAKAME.list}わかめ"
         when "random" then "#{ut.random WAKAME.random}"
         when "none" then ""
         else "unknown value: #{act.value}"
       ut.say channel.id, "@#{user.name} #{message}"
-      ut.generateAttachment "good",
+      at2 = ut.generateAttachment "good",
+        title: "result"
         text: "#{text} => #{user.name} choice #{action.name}"
+      original.attachments = [at2]
+      original
 
     ut.sendAttachment res.envelope.room, [at]
