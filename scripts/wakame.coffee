@@ -91,6 +91,18 @@ module.exports = (robot) ->
       at.actions.push ut.generateButton btn[0], btn[1], btn[2] ? "default"
     at
 
+  robot.adapter.client?.on? 'raw_message', (res)->
+    return unless res.type is 'star_added'
+    console.log res
+    return unless res.item.message.permalink
+    user = robot.adapter.client.getUserByID res.user
+    text = ":star: @#{user.name} added star #{res.item.message.permalink}"
+    robot.send {room: res.envelope.room}, text
+
+  reaction_matcher = (msg)-> msg.type is 'reaction_added'
+  robot.listen reaction_matcher, (res)->
+    console.log res
+
   robot.hear /卒論$/g, (res)->
     d = timediff new Date(), new Date(LIMIT.thesis)
     res.send ut.emojideco "卒論まであと#{d}日", 'fastparrot'
