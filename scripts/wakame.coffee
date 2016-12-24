@@ -6,6 +6,7 @@
 #
 # Commands:
 #   wakame - awesome wakame
+#   random - OMOMUKI
 #   hubot image - parrot.png
 #   卒論 - 卒論まであと...
 #   金曜日 - 華金
@@ -69,6 +70,9 @@ module.exports = (robot) ->
   robot.hear /wakame$/i, (res) ->
     res.send "#{ut.random WAKAME.list}わかめ"
 
+  robot.hear /random$/i, (res) ->
+    res.send "#{ut.random WAKAME.random}"
+
   robot.hear /.*/g, (res)->
     return if Math.random() < 0.95
     res.send ut.random WAKAME.random
@@ -81,16 +85,26 @@ module.exports = (robot) ->
 
   robot.respond /image/i, (res)->
     query = qs.stringify timestamp: new Date().getTime()
-    image_url = urljoin ADDRESS, 'image', "parrot.png?#{query}"
-    res.send image_url
+    res.send urljoin ADDRESS, 'image', "parrot.png?#{query}"
 
-  robot.respond /choice\s*([^\s]*)/i, (res)->
+  robot.respond /wakame\s+(.+)/i, (res)->
     unless robot.adapter instanceof SlackBot
-      res.send "unsurpported. (#{res.match[1]})"
-      return
+      return res.send "unsurpported."
+
+    num = parseInt res.match[1]
+    num = 0 if isNaN num
+    num = Math.min num, 20
+    at = ut.generateFieldAttachment "good"
+    for n in [0..num]
+      at.fields.push ut.generateField "wakame#{n}", ut.random(WAKAME.random), true
+    ut.sendAttachment res.envelope.room, [at]
+
+  robot.respond /att/i, (res)->
+    unless robot.adapter instanceof SlackBot
+      return res.send "unsurpported."
 
     color = ut.random ['good', 'warning', 'danger', '#439FE0']
-    at1 = ut.generateFieldAttachment color,
+    at = ut.generateAttachment color,
       pretext: res.match[1]
       text: 'a'
       author_name: 'author君'
@@ -102,20 +116,18 @@ module.exports = (robot) ->
       thumb_url: "https://tklab-slack-hubot-test.herokuapp.com/image/smallparrot.png"
       footer: 'hubot'
       footer_icon: urljoin ADDRESS, 'image', "octicons_commit.png"
+    ut.sendAttachment res.envelope.room, [at]
+  
 
-    at1.fields.push ut.generateField 'wakame1', ut.random(WAKAME.random), true
-    at1.fields.push ut.generateField 'wakame2', ut.random(WAKAME.random), true
-    at1.fields.push ut.generateField 'wakame3', ut.random(WAKAME.random), false
-    at1.fields.push ut.generateField 'wakame4', ut.random(WAKAME.random), true
+  robot.respond /choice\s*([^\s]*)/i, (res)->
+    unless robot.adapter instanceof SlackBot
+      return res.send "unsurpported."
 
-    at2 = ut.generateActionAttachment "#3AA3E3", "button_test",
+    at = ut.generateActionAttachment "#3AA3E3", "button_test",
       text: ut.emojideco 'wakame or random', 'fastparrot'
-
-    at2.actions.push ut.generateButton "wakame", "wakame", "primary"
-    at2.actions.push ut.generateButton "random", "random", "danger",
-      confirm: ut.generateConfirm "角煮ん", "卒論は...", "余裕", "ダメ"
-
-    ut.sendAttachment res.envelope.room, [at1, at2]
+    at.actions.push ut.generateButton "wakame", "wakame", "primary"
+    at.actions.push ut.generateButton "random", "random", "danger"
+    ut.sendAttachment res.envelope.room, [at]
 
   interactiveMessagesListen "button_test", (user, channel, action, text)->
     message = switch action.value
