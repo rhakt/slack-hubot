@@ -99,6 +99,7 @@ module.exports = (robot) ->
     #robot.send {room: res.envelope.room}, text
 
   reaction_matcher = (msg)->
+    console.log msg
     msg.type is 'reaction_added'
   robot.listen reaction_matcher, {}, (res)->
     console.log res
