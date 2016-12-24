@@ -63,9 +63,9 @@ module.exports = (robot) ->
       ret = func content.user, content.channel, content.actions[0], text, orig
       if ret
         res.json ret
+        delete actionListener[content.callback_id]
       else
         res.end ""
-      delete actionListener[content.callback_id]
     (callback_id, callback)-> actionListener[callback_id] = callback
 
   generateChoice = (base, color, text, buttons, callback)->

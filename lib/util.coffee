@@ -36,7 +36,7 @@ module.exports = (robot)->
 
   obj.generateButton = (name, value, style="default", extra={})->
     option =
-      name: value
+      name: name
       text: name
       type: "button"
       value: value
