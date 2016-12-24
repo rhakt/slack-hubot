@@ -147,5 +147,7 @@ module.exports = (robot) ->
         when "none" then ""
         else "unknown value: #{act.value}"
       ut.say channel.id, "@#{user.name} #{message}"
-      "#{text} => #{user.name} choice #{action.name}"
+      ut.generateAttachment "good",
+        text: "#{text} => #{user.name} choice #{action.name}"
+          
     ut.sendAttachment res.envelope.room, [at]
