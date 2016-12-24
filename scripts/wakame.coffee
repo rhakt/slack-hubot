@@ -59,7 +59,7 @@ module.exports = (robot) ->
       return unless func
       idx = parseInt content.attachment_id
       text = content.original_message.attachments[idx - 1].text ? ""
-      res.end func content.user, content.channel, content.actions[0], text
+      res.json func content.user, content.channel, content.actions[0], text
       delete actionListener[content.callback_id]
     (callback_id, callback)-> actionListener[callback_id] = callback
 
@@ -149,5 +149,5 @@ module.exports = (robot) ->
       ut.say channel.id, "@#{user.name} #{message}"
       ut.generateAttachment "good",
         text: "#{text} => #{user.name} choice #{action.name}"
-          
+
     ut.sendAttachment res.envelope.room, [at]
