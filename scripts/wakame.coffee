@@ -91,9 +91,8 @@ module.exports = (robot) ->
 
     # https://api.slack.com/docs/message-attachments
     color = ut.random ['good', 'warning', 'danger', '#439FE0']
-    at1 = ut.generateAttachment color,
+    at1 = ut.generateFieldAttachment color,
       pretext: res.match[1]
-      fields: []
       footer: 'hubot'
       footer_icon: urljoin ADDRESS, 'image', "octicons_commit.png"
 
@@ -102,22 +101,14 @@ module.exports = (robot) ->
       value: ut.random WAKAME.random
       short: false
 
-    at2 = ut.generateAttachment "#3AA3E3",
+    at2 = ut.generateActionAttachment "#3AA3E3", "button_test",
       text: ut.emojideco 'wakame or random', 'fastparrot'
-      callback_id: "button_test"
-      actions: []
       footer: 'hubot'
       footer_icon: urljoin ADDRESS, 'image', "octicons_commit.png"
 
-    at2.actions.push ut.generateButton "wakame", "wakame"
-    at2.actions.push ut.generateButton "random", "random",
-      style: "danger"
-      confirm:
-        title: "Are you sure?"
-        text: "卒論は大丈夫そうですか...？"
-        ok_text: "Yes"
-        dismiss_text: "No"
-
+    at2.actions.push ut.generateButton "wakame", "wakame", "primary"
+    at2.actions.push ut.generateButton "random", "random", "danger",
+      confirm: ut.generateConfirm "角煮ん", "卒論は...", "余裕", "ダメ"
     ut.sendAttachment res.envelope.room, [at1, at2]
 
   interactiveMessagesListen "button_test", (user, channel, action, text)->

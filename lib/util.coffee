@@ -18,12 +18,30 @@ module.exports = (robot)->
       #ts: timestamp
     _.extend option, extra
 
-  obj.generateButton = (name, value, extra={})->
+  obj.generateFieldAttachment = (color, extra={})->
+    extra.fields = []
+    obj.generateAttachment color, extra
+
+  obj.generateActionAttachment = (color, callback_id, extra={})->
+    extra.actions = []
+    extra.callback_id = callback_id
+    obj.generateAttachment color, extra
+
+  obj.generateButton = (name, value, style="default", extra={})->
     option =
       name: name
       text: name
       type: "button"
       value: value
+      style: style
+    _.extend option, extra
+
+  obj.generateConfirm = (title, text, ok, cancel, extra={})->
+    option =
+      title: title
+      text: text
+      ok_text: ok
+      dismiss_text: cancel
     _.extend option, extra
 
   obj.say = (channel_id, message)->
