@@ -30,7 +30,7 @@ deleteRequireCache = (name)->
     delete require.cache[file]
 
 DATA_PATH = '../data'
-loadData = (name, reload)->
+loadData = (name, reload=false)->
   deleteRequireCache name if reload
   require path.join DATA_PATH, name
 
@@ -93,14 +93,22 @@ module.exports = (robot) ->
     color = ut.random ['good', 'warning', 'danger', '#439FE0']
     at1 = ut.generateFieldAttachment color,
       pretext: res.match[1]
+      text: 'a'
+      author_name: 'author君'
+      author_link: "https://tklab-slack-hubot-test.herokuapp.com/"
+      author_icon: "https://tklab-slack-hubot-test.herokuapp.com/image/smallparrot.png"
+      title: "Slack API Documentation"
+      title_link: "https://api.slack.com/"
+      image_url: "https://tklab-slack-hubot-test.herokuapp.com/image/parrot.png"
+      thumb_url: "https://tklab-slack-hubot-test.herokuapp.com/image/smallparrot.png"
       footer: 'hubot'
       footer_icon: urljoin ADDRESS, 'image', "octicons_commit.png"
 
-    at1.fields.push
-      title: 'parrot :parrot:'
-      value: ut.random WAKAME.random
-      short: false
-
+    at1.fields.push ut.generateField 'wakame1', ut.random(WAKAME.random)
+    at1.fields.push ut.generateField 'wakame2', ut.random(WAKAME.random)
+    at1.fields.push ut.generateField 'wakame3', ut.random(WAKAME.random)
+    at1.fields.push ut.generateField 'wakame4', ut.random(WAKAME.random)
+    
     at2 = ut.generateActionAttachment "#3AA3E3", "button_test",
       text: ut.emojideco 'wakame or random', 'fastparrot'
       footer: 'hubot'
@@ -109,6 +117,7 @@ module.exports = (robot) ->
     at2.actions.push ut.generateButton "wakame", "wakame", "primary"
     at2.actions.push ut.generateButton "random", "random", "danger",
       confirm: ut.generateConfirm "角煮ん", "卒論は...", "余裕", "ダメ"
+
     ut.sendAttachment res.envelope.room, [at1, at2]
 
   interactiveMessagesListen "button_test", (user, channel, action, text)->

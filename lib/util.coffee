@@ -27,6 +27,13 @@ module.exports = (robot)->
     extra.callback_id = callback_id
     obj.generateAttachment color, extra
 
+  obj.generateField = (title, value, short=false)->
+    option =
+      title: title
+      value: value
+      short: short
+    option
+
   obj.generateButton = (name, value, style="default", extra={})->
     option =
       name: name
