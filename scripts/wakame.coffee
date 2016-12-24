@@ -96,7 +96,7 @@ module.exports = (robot) ->
     num = Math.min num, 20
     at = ut.generateFieldAttachment "good"
     for n in [0...num]
-      at.fields.push ut.generateField "wakame#{n}", ut.random(WAKAME.random), true
+      at.fields.push ut.generateField "wakame#{n}", ut.random(WAKAME.list), true
     ut.sendAttachment res.envelope.room, [at]
 
   robot.respond /att\s*([^\s]*)/i, (res)->
