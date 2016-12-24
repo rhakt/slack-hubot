@@ -95,11 +95,11 @@ module.exports = (robot) ->
     num = 0 if isNaN num
     num = Math.min num, 20
     at = ut.generateFieldAttachment "good"
-    for n in [0..num]
+    for n in [0...num]
       at.fields.push ut.generateField "wakame#{n}", ut.random(WAKAME.random), true
     ut.sendAttachment res.envelope.room, [at]
 
-  robot.respond /att/i, (res)->
+  robot.respond /att\s*([^\s]*)/i, (res)->
     unless robot.adapter instanceof SlackBot
       return res.send "unsurpported."
 
@@ -117,9 +117,9 @@ module.exports = (robot) ->
       footer: 'hubot'
       footer_icon: urljoin ADDRESS, 'image', "octicons_commit.png"
     ut.sendAttachment res.envelope.room, [at]
-  
 
-  robot.respond /choice\s*([^\s]*)/i, (res)->
+
+  robot.respond /choice/i, (res)->
     unless robot.adapter instanceof SlackBot
       return res.send "unsurpported."
 
