@@ -169,5 +169,5 @@ module.exports = (robot) ->
       ["ロース", "roast2", "danger"],
       ["ロース", "roast3"]
     ]
-    at = generateChoice "santa", "#3AA3E3", text, buttons, (user, channel, action, text, original)->
+    at = generateChoice "santa", "good", text, buttons, (user, channel, action, text, original)->
     ut.sendAttachment res.envelope.room, [at]
