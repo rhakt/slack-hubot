@@ -98,11 +98,14 @@ module.exports = (robot) ->
     #text = ":star: @#{user.name} added star #{res.item.message.permalink}"
     #robot.send {room: res.envelope.room}, text
 
-  reaction_matcher = (msg)->
-    console.log msg
-    msg.type is 'reaction_added'
-  robot.listen reaction_matcher, {}, (res)->
-    console.log res
+  reaction_added_matcher = (msg)-> msg.type is 'added'
+  robot.listen reaction_added_matcher, (res)->
+    user = res.user
+    reaction = res.reaction
+    item = res.item
+    console.log user.name
+    console.log reaction
+    console.log item
 
   robot.hear /卒論$/g, (res)->
     d = timediff new Date(), new Date(LIMIT.thesis)
