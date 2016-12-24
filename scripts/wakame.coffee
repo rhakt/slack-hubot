@@ -100,9 +100,9 @@ module.exports = (robot) ->
 
   reaction_added_matcher = (msg)-> msg.type is 'added'
   robot.listen reaction_added_matcher, (res)->
-    user = res.user
-    reaction = res.reaction
-    item = res.item
+    user = res.message.user
+    reaction = res.message.reaction
+    item = res.message.item
     console.log user.name
     console.log reaction
     console.log item
