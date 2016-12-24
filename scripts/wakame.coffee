@@ -70,7 +70,7 @@ module.exports = (robot) ->
     res.send "#{ut.random WAKAME.list}わかめ"
 
   robot.hear /.*/g, (res)->
-    return if Math.random() < 0.97
+    return if Math.random() < 0.95
     res.send ut.random WAKAME.random
 
   robot.hear /金曜日/g, (res)->
