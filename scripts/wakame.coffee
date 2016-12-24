@@ -136,9 +136,9 @@ module.exports = (robot) ->
 
     text = ut.emojideco 'wakame or random', 'fastparrot'
     buttons = [
-      ["wakame", "wakame", "primary"],
-      ["random", "random", "danger"],
-      ["none", "none"]
+      ["わかめ", "wakame", "primary"],
+      ["趣", "random", "danger"],
+      ["無", "none"]
     ]
     at = generateChoice "button_test", "#3AA3E3", text, buttons, (user, channel, action, text)->
       message = switch action.value
