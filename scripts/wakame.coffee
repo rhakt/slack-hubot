@@ -91,6 +91,7 @@ module.exports = (robot) ->
       at.actions.push ut.generateButton btn[0], btn[1], btn[2] ? "default"
     at
 
+  # 動かない
   robot.adapter.client?.on? 'star_added', (res)->
     console.log res
     #return unless res.item.message.permalink
