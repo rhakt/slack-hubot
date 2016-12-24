@@ -58,8 +58,9 @@ module.exports = (robot) ->
       func = actionListener[content.callback_id]
       return unless func
       idx = parseInt content.attachment_id
-      text = content.original_message.attachments[idx - 1].text ? ""
-      ret = func content.user, content.channel, content.actions[0], text, content.original_message
+      orig = content.original_message
+      text = orig.attachments[idx - 1].text ? ""
+      ret = func content.user, content.channel, content.actions[0], text, orig
       res.json ret
       delete actionListener[content.callback_id]
     (callback_id, callback)-> actionListener[callback_id] = callback
@@ -134,8 +135,8 @@ module.exports = (robot) ->
   robot.respond /choice/i, (res)->
     unless robot.adapter instanceof SlackBot
       return res.send "unsurpported."
-
-    text = ut.emojideco 'wakame or random', 'fastparrot'
+    
+    text = 'wakame or random'
     buttons = [
       ["わかめ", "wakame", "primary"],
       ["趣", "random", "danger"],
@@ -153,5 +154,4 @@ module.exports = (robot) ->
         text: "#{text} => #{user.name} choice #{action.name}"
       original.attachments = [at2]
       original
-
     ut.sendAttachment res.envelope.room, [at]
