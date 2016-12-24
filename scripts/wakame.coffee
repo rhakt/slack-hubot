@@ -89,7 +89,6 @@ module.exports = (robot) ->
       res.send "unsurpported. (#{res.match[1]})"
       return
 
-    # https://api.slack.com/docs/message-attachments
     color = ut.random ['good', 'warning', 'danger', '#439FE0']
     at1 = ut.generateFieldAttachment color,
       pretext: res.match[1]
@@ -104,15 +103,13 @@ module.exports = (robot) ->
       footer: 'hubot'
       footer_icon: urljoin ADDRESS, 'image', "octicons_commit.png"
 
-    at1.fields.push ut.generateField 'wakame1', ut.random(WAKAME.random)
-    at1.fields.push ut.generateField 'wakame2', ut.random(WAKAME.random)
-    at1.fields.push ut.generateField 'wakame3', ut.random(WAKAME.random)
-    at1.fields.push ut.generateField 'wakame4', ut.random(WAKAME.random)
-    
+    at1.fields.push ut.generateField 'wakame1', ut.random(WAKAME.random), true
+    at1.fields.push ut.generateField 'wakame2', ut.random(WAKAME.random), true
+    at1.fields.push ut.generateField 'wakame3', ut.random(WAKAME.random), false
+    at1.fields.push ut.generateField 'wakame4', ut.random(WAKAME.random), true
+
     at2 = ut.generateActionAttachment "#3AA3E3", "button_test",
       text: ut.emojideco 'wakame or random', 'fastparrot'
-      footer: 'hubot'
-      footer_icon: urljoin ADDRESS, 'image', "octicons_commit.png"
 
     at2.actions.push ut.generateButton "wakame", "wakame", "primary"
     at2.actions.push ut.generateButton "random", "random", "danger",
