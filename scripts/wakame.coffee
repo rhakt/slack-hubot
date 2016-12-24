@@ -60,6 +60,7 @@ module.exports = (robot) ->
       idx = parseInt content.attachment_id
       text = content.original_message.attachments[idx - 1].text ? ""
       res.end func content.user, content.channel, content.actions[0], text
+      delete actionListener[content.callback_id]
     (callback_id, callback)-> actionListener[callback_id] = callback
 
 
@@ -124,16 +125,19 @@ module.exports = (robot) ->
     unless robot.adapter instanceof SlackBot
       return res.send "unsurpported."
 
-    at = ut.generateActionAttachment "#3AA3E3", "button_test",
+    timestamp = new Date().getTime()
+    cid = "button_test_#{timestamp}"
+
+    interactiveMessagesListen cid, (user, channel, action, text)->
+      message = switch action.value
+        when "wakame" then "#{ut.random WAKAME.list}わかめ"
+        when "random" then "#{ut.random WAKAME.random}"
+        else "unknown value: #{act.value}"
+      ut.say channel.id, "@#{user.name} #{message}"
+      "#{text} => #{user.name} choice #{action.name}"
+
+    at = ut.generateActionAttachment "#3AA3E3", cid,
       text: ut.emojideco 'wakame or random', 'fastparrot'
     at.actions.push ut.generateButton "wakame", "wakame", "primary"
     at.actions.push ut.generateButton "random", "random", "danger"
     ut.sendAttachment res.envelope.room, [at]
-
-  interactiveMessagesListen "button_test", (user, channel, action, text)->
-    message = switch action.value
-        when "wakame" then "#{ut.random WAKAME.list}わかめ"
-        when "random" then "#{ut.random WAKAME.random}"
-        else "unknown value: #{act.value}"
-    ut.say channel.id, "@#{user.name} #{message}"
-    "#{text} => #{user.name} choice #{action.name}"
