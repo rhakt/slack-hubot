@@ -106,6 +106,7 @@ module.exports = (robot) ->
         ut.say ev.item.channel, ":star: added by #{user.name}: #{link}"
       when 'reaction_added'
         console.log 'a'
+    res.end ''
 
   reaction_added_matcher = (msg)-> msg.type is 'added'
   robot.listen reaction_added_matcher, (res)->
