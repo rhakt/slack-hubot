@@ -100,8 +100,8 @@ module.exports = (robot) ->
     ev = req.body.event
     switch ev.type
       when 'star_added'
-        user = robot.adapter.client.rtm.dataStore.getUserById ev.message.user
         console.log ev.item
+        user = robot.adapter.client.rtm.dataStore.getUserById ev.item.message.user
         link = ev.item.message.permalink
         ut.say ev.item.channel, ":star: added by #{user}: #{link}"
       when 'reaction_added'
