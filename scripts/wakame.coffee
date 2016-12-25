@@ -106,8 +106,9 @@ module.exports = (robot) ->
       when 'star_added', 'star_removed'
         link = item.message.permalink
         text = item.message.text
+        console.log text
         method = ev.type.replace 'star_', ''
-        ut.say channel, ":star: #{method} by #{user.name}: #{text} #{link}"
+        ut.say channel, ":star: #{method} by #{user.name}: #{link}"
       when 'reaction_added', 'reaction_removed'
         break if user.name == robot.name
         reaction = ev.reaction
@@ -121,8 +122,8 @@ module.exports = (robot) ->
             text = h.text
             break
         func = if ev.type == 'reaction_added' then 'add' else 'remove'
-        if text and func == 'add'
-          ut.say channel, ":#{reaction}: added by #{user.name} #{text}"
+        if func == 'add'
+          ut.say channel, ":#{reaction}: added by #{user.name}"
         robot.adapter.client.web.reactions[func] reaction,
           timestamp: ts
           channel: channel
