@@ -99,16 +99,26 @@ module.exports = (robot) ->
     return unless req.body.event?
     ev = req.body.event
     console.log ev
+    user = robot.adapter.client.rtm.dataStore.getUserById ev.user
+    item = ev.item
+    channel = item.channel
     switch ev.type
       when 'star_added'
         # rtmでも流して欲しいんだけど
-        user = robot.adapter.client.rtm.dataStore.getUserById ev.user
-        link = ev.item.message.permalink
-        ut.say ev.item.channel, ":star: added by #{user.name}: #{link}"
+        link = item.message.permalink
+        ut.say channel, ":star: added by #{user.name}: #{link}"
       when 'reaction_added'
-        console.log '何でこっちはeventでは流れてこないんですか？'
+        break if user.name == robot.name
+        reaction = ev.reaction
+        type = item.type
+        ts = item.ts
+        #ut.say channel, ":#{reaction}: added by #{user.name} type: #{type}"
+        robot.adapter.client.reactions.add reaction,
+          timestamp: ts
+          channel: channel
     res.end ''
 
+  ###
   reaction_added_matcher = (msg)-> msg.type is 'added'
   robot.listen reaction_added_matcher, (res)->
     user = res.message.user
@@ -117,6 +127,7 @@ module.exports = (robot) ->
     console.log user.name
     console.log reaction
     console.log item
+  ###
 
   robot.hear /卒論$/g, (res)->
     d = timediff new Date(), new Date(LIMIT.thesis)
