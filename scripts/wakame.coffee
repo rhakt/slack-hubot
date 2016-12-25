@@ -104,7 +104,6 @@ module.exports = (robot) ->
     channel = item.channel
     switch ev.type
       when 'star_added', 'star_removed'
-        # rtmでも流して欲しいんだけど
         link = item.message.permalink
         method = ev.type.replace 'star_', ''
         ut.say channel, ":star: #{method} by #{user.name}: #{link}"
@@ -113,6 +112,8 @@ module.exports = (robot) ->
         reaction = ev.reaction
         type = item.type
         ts = item.ts
+        ch = robot.adapter.client.rtm.dataStore.getChannelGroupOrDMById channel
+        console.log ch.history[0]
         #ut.say channel, ":#{reaction}: added by #{user.name} type: #{type}"
         func = if ev.type == 'reaction_added' then 'add' else 'remove'
         robot.adapter.client.web.reactions[func] reaction,
