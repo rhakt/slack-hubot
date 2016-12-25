@@ -114,8 +114,14 @@ module.exports = (robot) ->
         type = item.type
         ts = item.ts
         func = if ev.type == 'reaction_added' then 'add' else 'remove'
-        #if func == 'add'
-        #  ut.say channel, ":#{reaction}: added by #{user.name}"
+        if func == 'add'
+          #ut.say channel, ":#{reaction}: added by #{user.name}"
+          opt =
+            latest: ts
+            oldest: ts
+          robot.adapter.client.web.channels.history channel, opt, (err, res)->
+            console.log err if err
+            console.log res if res
         robot.adapter.client.web.reactions[func] reaction,
           timestamp: ts
           channel: channel
