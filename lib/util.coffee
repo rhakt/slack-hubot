@@ -51,7 +51,7 @@ module.exports = (robot)->
       dismiss_text: cancel
     _.extend option, extra
 
-  obj.say = (channel_id, message)->
+  obj.say = (channel_id, message, extra={})->
     ###
     envelope =
       user:
