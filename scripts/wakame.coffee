@@ -115,8 +115,8 @@ module.exports = (robot) ->
         ts = item.ts
         ch = robot.adapter.client.rtm.dataStore.getChannelGroupOrDMById channel
         text = undefined
+        console.log ch.history
         for h in ch.history
-          console.log h
           if h.ts == ts
             text = h.text
             break
