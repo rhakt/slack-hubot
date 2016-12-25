@@ -103,7 +103,7 @@ module.exports = (robot) ->
         console.log ev.item
         user = robot.adapter.client.rtm.dataStore.getUserById ev.item.message.user
         link = ev.item.message.permalink
-        ut.say ev.item.channel, ":star: added by #{user}: #{link}"
+        ut.say ev.item.channel, ":star: added by #{user.name}: #{link}"
       when 'reaction_added'
         console.log ev
 
