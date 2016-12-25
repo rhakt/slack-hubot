@@ -61,7 +61,7 @@ module.exports = (robot)->
     robot.send envelope, message
     ###
     options =
-      unfurl_links: false
+      unfurl_links: true
     options = _.extend options, extra
     robot.adapter.client.web.chat.postMessage room, message, options
 
