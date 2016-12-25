@@ -114,13 +114,6 @@ module.exports = (robot) ->
         reaction = ev.reaction
         type = item.type
         ts = item.ts
-        ch = robot.adapter.client.rtm.dataStore.getChannelGroupOrDMById channel
-        text = undefined
-        console.log ch.history
-        for h in ch.history
-          if h.ts == ts
-            text = h.text
-            break
         func = if ev.type == 'reaction_added' then 'add' else 'remove'
         if func == 'add'
           ut.say channel, ":#{reaction}: added by #{user.name}"

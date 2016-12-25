@@ -52,12 +52,18 @@ module.exports = (robot)->
     _.extend option, extra
 
   obj.say = (channel_id, message)->
+    ###
     envelope =
       user:
         type: 'groupchat'
         room: channel_id
       room: channel_id
     robot.send envelope, message
+    ###
+    options =
+      unfurl_links: false
+    options = _.extend options, extra
+    robot.adapter.client.web.chat.postMessage room, message, options
 
   obj.sendAttachment = (room, attachments, extra={})->
     options =
