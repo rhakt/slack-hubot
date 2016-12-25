@@ -92,7 +92,10 @@ module.exports = (robot) ->
     at
 
   robot.router.post "/slack/event-endpoint", (req, res) ->
-    console.log req.body
+    verify = req.body.token
+    return unless verify == process.env.SLACK_TOKEN_VERIFY
+    challenge = req.body.challenge
+    res.json challenge: challenge
 
   # 動かない
   robot.adapter.client?.on? 'star_added', (res)->
