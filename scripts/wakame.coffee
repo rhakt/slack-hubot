@@ -101,11 +101,12 @@ module.exports = (robot) ->
     console.log ev
     switch ev.type
       when 'star_added'
+        # rtmでも流して欲しいんだけど
         user = robot.adapter.client.rtm.dataStore.getUserById ev.user
         link = ev.item.message.permalink
         ut.say ev.item.channel, ":star: added by #{user.name}: #{link}"
       when 'reaction_added'
-        console.log 'a'
+        console.log '何でこっちはeventでは流れてこないんですか？'
     res.end ''
 
   reaction_added_matcher = (msg)-> msg.type is 'added'
