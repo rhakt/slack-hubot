@@ -92,21 +92,17 @@ module.exports = (robot) ->
     at
 
   robot.router.post "/slack/event-endpoint", (req, res) ->
-    verify = req.body.token
-    return unless verify == process.env.SLACK_TOKEN_VERIFY
+    return unless req.body.token == process.env.SLACK_TOKEN_VERIFY
     if req.body.challenge?
       challenge = req.body.challenge
       return res.json challenge: challenge
+    return unless req.body.event?
     ev = req.body.event
-    console.log event
-
-  # 動かない
-  robot.adapter.client?.on? 'star_added', (res)->
-    console.log res
-    #return unless res.item.message.permalink
-    #user = robot.adapter.client.getUserByID res.user
-    #text = ":star: @#{user.name} added star #{res.item.message.permalink}"
-    #robot.send {room: res.envelope.room}, text
+    switch ev.type
+      when 'star_added'
+        user = robot.adapter.client.rtm.dataStore.getUserById
+        console.log ev.item
+        ut.say ev.item.channel, ":star: added by #{user}"
 
   reaction_added_matcher = (msg)-> msg.type is 'added'
   robot.listen reaction_added_matcher, (res)->
