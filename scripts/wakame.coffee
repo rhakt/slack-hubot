@@ -105,17 +105,23 @@ module.exports = (robot) ->
     switch ev.type
       when 'star_added', 'star_removed'
         link = item.message.permalink
+        text = item.message.text
         method = ev.type.replace 'star_', ''
-        ut.say channel, ":star: #{method} by #{user.name}: #{link}"
+        ut.say channel, ":star: #{method} by #{user.name}: #{text} #{link}"
       when 'reaction_added', 'reaction_removed'
         break if user.name == robot.name
         reaction = ev.reaction
         type = item.type
         ts = item.ts
         ch = robot.adapter.client.rtm.dataStore.getChannelGroupOrDMById channel
-        console.log ch.history[0]
-        #ut.say channel, ":#{reaction}: added by #{user.name} type: #{type}"
+        text = undefined
+        for h in ch.history
+          continue unless h.ts == ts
+          text = h.text
+          break
         func = if ev.type == 'reaction_added' then 'add' else 'remove'
+        if text and func == 'add'
+          ut.say channel, ":#{reaction}: added by #{user.name} #{text}"
         robot.adapter.client.web.reactions[func] reaction,
           timestamp: ts
           channel: channel
