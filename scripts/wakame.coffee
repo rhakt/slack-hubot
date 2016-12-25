@@ -113,7 +113,7 @@ module.exports = (robot) ->
         type = item.type
         ts = item.ts
         #ut.say channel, ":#{reaction}: added by #{user.name} type: #{type}"
-        robot.adapter.client.reactions.add reaction,
+        robot.adapter.client.web.reactions.add reaction,
           timestamp: ts
           channel: channel
     res.end ''
