@@ -98,14 +98,14 @@ module.exports = (robot) ->
       return res.json challenge: challenge
     return unless req.body.event?
     ev = req.body.event
+    console.log ev
     switch ev.type
       when 'star_added'
-        console.log ev.item
         user = robot.adapter.client.rtm.dataStore.getUserById ev.item.message.user
         link = ev.item.message.permalink
         ut.say ev.item.channel, ":star: added by #{user.name}: #{link}"
       when 'reaction_added'
-        console.log ev
+        console.log 'a'
 
   reaction_added_matcher = (msg)-> msg.type is 'added'
   robot.listen reaction_added_matcher, (res)->
