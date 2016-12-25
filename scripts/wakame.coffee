@@ -92,9 +92,8 @@ module.exports = (robot) ->
     at
 
   robot.router.post "/slack/event-endpoint", (req, res) ->
-    content = JSON.parse req.body.payload
-    console.log content
-  
+    console.log req.body
+
   # 動かない
   robot.adapter.client?.on? 'star_added', (res)->
     console.log res
