@@ -91,6 +91,10 @@ module.exports = (robot) ->
       at.actions.push ut.generateButton btn[0], btn[1], btn[2] ? "default"
     at
 
+  robot.router.post "/slack/event-endpoint", (req, res) ->
+    content = JSON.parse req.body.payload
+    console.log content
+  
   # 動かない
   robot.adapter.client?.on? 'star_added', (res)->
     console.log res
