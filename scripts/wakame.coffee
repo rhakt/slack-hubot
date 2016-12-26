@@ -154,10 +154,14 @@ module.exports = (robot) ->
     res.send ut.random WAKAME.random
 
   robot.hear /:(.+):/i, (res)->
-    console.log res
-    robot.adapter.client.web.reactions.add ":#{res.match[1]}:",
-      timestamp: res.envelope.message.id
-      channel: res.envelope.message.room
+    mes = res.envelope.message
+    ut.addReaction res.match[1], mes.room, mes.id
+
+  robot.hear /:.*pen.*:/i, (res)->
+    mes = res.envelope.message
+    ut.addReaction "apple", mes.room, mes.id
+    ut.addReaction "pencil2", mes.room, mes.id
+
 
   robot.hear /金曜日/g, (res)->
     header = _.repeat ":aussiereversecongaparrot:", 8

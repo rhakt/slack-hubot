@@ -73,4 +73,9 @@ module.exports = (robot)->
     options = _.extend options, extra
     robot.adapter.client.web.chat.postMessage room, '', options
 
+  obj.addReaction = (reaction, room, ts)->
+    robot.adapter.client.web.reactions.add reaction,
+      timestamp: ts
+      channel: room
+
   return obj
