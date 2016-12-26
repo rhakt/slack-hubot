@@ -153,11 +153,11 @@ module.exports = (robot) ->
     return if Math.random() < 0.95
     res.send ut.random WAKAME.random
 
-  robot.respond /.*/g, (res)->
+  robot.respond /:([^:]+):/g, (res)->
     console.log res
-    robot.adapter.client.web.reactions.add ':parrot:',
-      timestamp: res.id
-      channel: res.envelope.room
+    robot.adapter.client.web.reactions.add ":#{res.match[1]}:",
+      timestamp: res.envelope.message.id
+      channel: res.envelope.message.room
 
   robot.hear /金曜日/g, (res)->
     header = _.repeat ":aussiereversecongaparrot:", 8
