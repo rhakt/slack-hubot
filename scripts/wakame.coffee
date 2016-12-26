@@ -153,6 +153,12 @@ module.exports = (robot) ->
     return if Math.random() < 0.95
     res.send ut.random WAKAME.random
 
+  robot.respond /.*/g, (res)->
+    console.log res
+    robot.adapter.client.web.reactions.add ':parrot:',
+      timestamp: res.id
+      channel: res.envelope.room
+
   robot.hear /金曜日/g, (res)->
     header = _.repeat ":aussiereversecongaparrot:", 8
     content = ut.emojideco "華金", 'fastparrot', 3
