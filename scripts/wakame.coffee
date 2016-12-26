@@ -149,11 +149,11 @@ module.exports = (robot) ->
   robot.hear /random$/i, (res) ->
     res.send "#{ut.random WAKAME.random}"
 
-  robot.hear /.*/g, (res)->
+  robot.hear /.*/i, (res)->
     return if Math.random() < 0.97
     res.send ut.random WAKAME.random
 
-  robot.hear /\:(.+)\:/g, (res)->
+  robot.hear /:(.+):/i, (res)->
     console.log res
     robot.adapter.client.web.reactions.add ":#{res.match[1]}:",
       timestamp: res.envelope.message.id
