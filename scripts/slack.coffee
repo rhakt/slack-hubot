@@ -12,11 +12,10 @@
 #   a
 
 _ = require 'lodash'
-SlackBot = require 'hubot-slack/src/bot'
+Slack = require 'hubot-slack-enhance'
 
 # my module
 Util = require '../lib/util'
-Slack = require '../lib/slack'
 
 # data
 WAKAME = require '../data/wakame'
@@ -24,7 +23,7 @@ LIMIT = require '../data/limit'
 
 
 module.exports = (robot) ->
-  return unless robot.adapter instanceof SlackBot
+  return unless Slack.isSlackAdapter robot
   slack = new Slack robot
 
   robot.hear /金曜日/g, (res)->
