@@ -40,7 +40,7 @@ module.exports = (robot) ->
 
   robot.respond /wakame\s+(.+)/i, (res)->
     num = parseInt res.match[1]
-    num = 0 if isNaN num
+    num = 1 if isNaN num
     num = Math.min num, 20
     at = slack.generateFieldAttachment "good"
     for n in [0...num]
