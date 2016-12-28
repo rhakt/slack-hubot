@@ -100,6 +100,6 @@ module.exports = (robot) ->
     robot.logger.info ":#{reaction}: added by #{user.name} (#{ts})"
     # missing_scopeが出てきて取れないんだけど？
     opt = {}
-    slack.web.channels.info channel, (err, res)->
+    slack.web.channels.history channel, opt, (err, res)->
       console.log err if err
       console.log res if res
