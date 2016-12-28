@@ -28,7 +28,7 @@ module.exports = (robot) ->
   slack = new Slack robot
 
   robot.respond /delete/g, (res)->
-    slack.deleteMessage 10
+    slack.deleteMessage res.envelope.room, 100
 
   robot.hear /金曜日/g, (res)->
     mes = res.envelope.message
