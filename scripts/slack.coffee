@@ -11,6 +11,7 @@
 # Author:
 #   a
 
+{inspect} = require 'util'
 _ = require 'lodash'
 Slack = require 'hubot-slack-enhance'
 
@@ -92,8 +93,8 @@ module.exports = (robot) ->
     link = item.message.permalink
     text = item.message.text
     slack.say channel, ":star: added by #{user.name}: #{link}", (err, res)->
-      console.log "err: #{err}" if err
-      console.log "res: #{res}" if res
+      console.log "err: #{inspect err, depth: null}" if err
+      console.log "res: #{inspect res, depth: null}" if res
 
   slack.on 'reaction_added', (ev, user, channel, item)->
     return if user.name == robot.name
