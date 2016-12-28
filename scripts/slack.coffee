@@ -101,8 +101,6 @@ module.exports = (robot) ->
     reaction = ev.reaction
     ts = item.ts
     robot.logger.info ":#{reaction}: added by #{user.name} (#{ts})"
-    # missing_scopeが出てきて取れないんだけど？
-    opt = {}
-    slack.web.channels.history channel, opt, (err, res)->
+    slack.getMessageFromTimestamp channel, ts, (err, res)->
       console.log err if err
       console.log res if res
