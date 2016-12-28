@@ -62,28 +62,44 @@ module.exports = (robot) ->
     slack.sendAttachment res.envelope.room, [at]
 
   robot.respond /choice/i, (res)->
+    at = slack.generateAttachment 'warning',
+      pretext: "outer"
+      text: "inner"
+    # 選択肢生成
     text = 'wakame or random'
     buttons = [
       ["わかめ", "wakame", "primary"],
       ["趣", "random", "danger"]
     ]
-    # 選択肢生成
-    at = slack.generateChoice "button_test", "#3AA3E3", text, buttons, (user, channel, action, text, original)->
+    at2 = slack.generateChoice "button_test", "#3AA3E3", text, buttons, (user, action)->
       # ここはボタンクリック時の動作設定
       message = switch action.value
         when "wakame" then "#{Util.random WAKAME.list}わかめ"
         when "random" then "#{Util.random WAKAME.random}"
         else "unknown value: #{act.value}"
       # bot君の発言 choiceに対する応答ではなく、自発なのでそういう関数を作ってある
-      # room (channel.id)が必要
-      slack.say channel.id, "@#{user.name} #{message}"
+      slack.say res.envelope.room, "@#{user.name} #{message}"
       # ボタンクリック後に置き換えられるattachmentを生成
-      at2 = slack.generateAttachment "good",
+      # これがoriginalのattachmentの置き換わり先になる
+      slack.generateAttachment "good",
         title: "result"
         text: "#{text} => #{user.name} choice #{action.name}"
-      # originalは、下のslack.sendAttachmentで最終的にslackに送った全文っぽい
-      # originalの中身のうち、attachmentを変えたものを送るとうまくいく
-      original.attachments = [at2]
-      original
     # attachmentを送信
-    slack.sendAttachment res.envelope.room, [at]
+    slack.sendAttachment res.envelope.room, [at, at2]
+
+  slack.on 'star_added', (ev, user, channel, item)->
+    return if user.name == robot.name
+    link = item.message.permalink
+    text = item.message.text
+    slack.say channel, ":star: added by #{user.name}: #{link}"
+
+  slack.on 'reaction_added', (ev, user, channel, item)->
+    return if user.name == robot.name
+    reaction = ev.reaction
+    ts = item.ts
+    robot.logger.debug ":#{reaction}: added by #{user.name} (#{ts})"
+    # missing_scopeが出てきて取れないんだけど？
+    opt = {}
+    robot.adapter.client.web.channels.history channel, opt, (err, res)->
+      console.log err if err
+      console.log res if res
