@@ -66,7 +66,7 @@ module.exports = (robot) ->
       pretext: "outer"
       text: "inner"
     # 選択肢生成
-    text = 'wakame or random'
+    text = 'wakame or random？'
     buttons = [
       ["わかめ", "wakame", "primary"],
       ["趣", "random", "danger"]
@@ -82,8 +82,8 @@ module.exports = (robot) ->
       # ボタンクリック後に置き換えられるattachmentを生成
       # これがoriginalのattachmentの置き換わり先になる
       slack.generateAttachment "good",
-        title: "result"
-        text: "#{text} => #{user.name} choice #{action.name}"
+        title: "#{text}"
+        text: "#{user.name} choice #{action.name}"
     # attachmentを送信
     slack.sendAttachment res.envelope.room, [at, at2]
 
@@ -97,7 +97,7 @@ module.exports = (robot) ->
     return if user.name == robot.name
     reaction = ev.reaction
     ts = item.ts
-    robot.logger.debug ":#{reaction}: added by #{user.name} (#{ts})"
+    robot.logger.info ":#{reaction}: added by #{user.name} (#{ts})"
     # missing_scopeが出てきて取れないんだけど？
     opt = {}
     robot.adapter.client.web.channels.history channel, opt, (err, res)->
