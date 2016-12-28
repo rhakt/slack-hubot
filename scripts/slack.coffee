@@ -100,7 +100,11 @@ module.exports = (robot) ->
     return if user.name == robot.name
     reaction = ev.reaction
     ts = item.ts
-    robot.logger.info ":#{reaction}: added by #{user.name} (#{ts})"
     slack.getMessageFromTimestamp channel, ts, (err, res)->
-      console.log err if err
-      console.log res if res
+      return if err
+      text = ":#{reaction}: added by #{user.name}"
+      at = slack.generateFieldAttachment "good",
+        pretext: text
+        text: "#{res.text}"
+        author_name: "#{res.userName}"
+      slack.sendAttachment channel, [at]
