@@ -27,6 +27,9 @@ module.exports = (robot) ->
   return unless Slack.isSlackAdapter robot
   slack = new Slack robot
 
+  robot.respond /delete/g, (res)->
+    slack.deleteMessage 10
+
   robot.hear /金曜日/g, (res)->
     mes = res.envelope.message
     slack.addReaction 'parrot', mes.room, mes.id
