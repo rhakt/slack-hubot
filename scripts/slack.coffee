@@ -91,7 +91,9 @@ module.exports = (robot) ->
     return if user.name == robot.name
     link = item.message.permalink
     text = item.message.text
-    slack.say channel, ":star: added by #{user.name}: #{link}"
+    slack.say channel, ":star: added by #{user.name}: #{link}", (err, res)->
+      console.log "err: #{err}" if err
+      console.log "res: #{res}" if res
 
   slack.on 'reaction_added', (ev, user, channel, item)->
     return if user.name == robot.name
