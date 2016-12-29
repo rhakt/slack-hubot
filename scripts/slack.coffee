@@ -112,6 +112,7 @@ module.exports = (robot) ->
       slack.sendAttachment channel, [at]
 
   robot.respond /coffee\s+```(.+)```/m, (res)->
+    room = res.envelope.room
     options =
       uri: 'http://melpon.org/wandbox/api/compile.json',
       method: 'POST',
@@ -126,4 +127,4 @@ module.exports = (robot) ->
       at = slack.generateFieldAttachment color
       text = "```\n#{message}\n```"
       at.fields.push slack.generateField "result", text, false
-      slack.sendAttachment res.envelope.room, [at]
+      slack.sendAttachment room, [at]
