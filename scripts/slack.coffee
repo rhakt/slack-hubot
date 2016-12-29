@@ -13,6 +13,7 @@
 
 {inspect} = require 'util'
 _ = require 'lodash'
+request = require 'request'
 Slack = require 'hubot-slack-enhance'
 
 # my module
@@ -95,9 +96,7 @@ module.exports = (robot) ->
     return if user.name == robot.name
     link = item.message.permalink
     text = item.message.text
-    slack.say channel, ":star: added by #{user.name}: #{link}", (err, res)->
-      console.log "err: #{inspect err, depth: null}" if err
-      console.log "res: #{inspect res, depth: null}" if res
+    slack.say channel, ":star: added by #{user.name}: #{link}"
 
   slack.on 'reaction_added', (ev, user, channel, item)->
     return if user.name == robot.name
@@ -111,3 +110,20 @@ module.exports = (robot) ->
         text: "#{res.text}"
         author_name: "#{res.userName}"
       slack.sendAttachment channel, [at]
+
+  robot.respond /coffee\s+```(.+)```/m, (res)->
+    options =
+      uri: 'http://melpon.org/wandbox/api/compile.json',
+      method: 'POST',
+      json:
+        compiler: 'coffee-script-head'
+        code: res.match[1]
+        #options: 'coffee-compile-only'
+    request options, (err, res, body)=>
+      return @robot.logger.erro "err: #{inspect err, depth: null}" if err
+      color = if body.status == '0' then 'good' else 'danger'
+      message = body.program_message
+      at = slack.generateFieldAttachment color
+      text = "```\n#{message}\n```"
+      at.fields.push slack.generateField "result", text, false
+      slack.sendAttachment res.envelope.room, [at]

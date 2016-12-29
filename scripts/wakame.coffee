@@ -19,6 +19,7 @@
 
 qs = require 'querystring'
 _ = require 'lodash'
+request = require 'request'
 
 # my module
 timediff = require '../lib/timediff'
