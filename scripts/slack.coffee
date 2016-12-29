@@ -123,8 +123,12 @@ module.exports = (robot) ->
     request options, (err, res, body)=>
       return @robot.logger.erro "err: #{inspect err, depth: null}" if err
       color = if body.status == '0' then 'good' else 'danger'
+      result = if body.status == '0' then 'success' else 'error'
+      code = if body.program_error? then body.program_error else body.program_output
       message = body.program_message
       at = slack.generateAttachment color,
-        title: '*result*'
-        text: """```#{message}```"""
-      slack.sendAttachment room, [at]
+        title: ''
+        text: """#{message}"""
+      at2 = slack.generateAttachment color,
+        pretext: """```#{code}```"""
+      slack.sendAttachment room, [at, at2]
