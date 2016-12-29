@@ -127,8 +127,7 @@ module.exports = (robot) ->
       code = if body.program_error? then body.program_error else body.program_output
       message = body.program_message
       at = slack.generateAttachment color,
-        title: ''
-        text: """#{message}"""
-      at2 = slack.generateAttachment color,
-        pretext: """```#{code}```"""
-      slack.sendAttachment room, [at, at2]
+        title: result
+        text: "#{message}"
+      slack.sendAttachment room, [at]
+      slack.say room, "```#{code}```"
