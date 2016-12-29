@@ -41,6 +41,9 @@ module.exports = (robot) ->
   robot.hear /random$/i, (res) ->
     res.send "#{Util.random WAKAME.random}"
 
+  robot.hear /joke$/i, (res)->
+    res.send "#{Util.random WAKAME.joke}"
+
   robot.hear /.*/i, (res)->
     return if Math.random() < 0.98
     res.send Util.random WAKAME.random
