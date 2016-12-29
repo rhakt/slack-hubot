@@ -129,5 +129,5 @@ module.exports = (robot) ->
       at = slack.generateAttachment color,
         title: result
         text: "#{message}"
-      slack.sendAttachment room, [at]
-      slack.say room, "```#{code}```"
+      slack.sendAttachment room, [at], ->
+        slack.say room, ">```#{code}```"
