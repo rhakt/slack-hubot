@@ -89,7 +89,7 @@ module.exports = (robot) ->
       # ボタンクリック後に置き換えられるattachmentを生成
       # これがoriginalのattachmentの置き換わり先になる
       slack.generateAttachment "good",
-        title: "*#{text}*"
+        title: "#{text}"
         text: "#{user.name} choice #{action.name}"
     # attachmentを送信
     slack.sendAttachment res.envelope.room, [at, at2]
