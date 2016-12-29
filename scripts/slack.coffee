@@ -27,6 +27,8 @@ LIMIT = require '../data/limit'
 module.exports = (robot) ->
   return unless Slack.isSlackAdapter robot
   slack = new Slack robot
+  # test
+  slack2 = new Slack robot
 
   robot.respond /delete/g, (res)->
     slack.deleteMessage res.envelope.room, 100
