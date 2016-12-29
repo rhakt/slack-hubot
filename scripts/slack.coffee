@@ -111,7 +111,7 @@ module.exports = (robot) ->
         author_name: "#{res.userName}"
       slack.sendAttachment channel, [at]
 
-  robot.respond /coffee\s+```(.+)```/m, (res)->
+  robot.respond /coffee\s+[^]*```([^]+)```/m, (res)->
     room = res.envelope.room
     options =
       uri: 'http://melpon.org/wandbox/api/compile.json',
@@ -130,4 +130,4 @@ module.exports = (robot) ->
         title: result
         text: "#{message}"
       slack.sendAttachment room, [at], ->
-        slack.say room, ">```#{code}```"
+        #slack.say room, ">```#{code}```"
