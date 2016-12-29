@@ -87,7 +87,7 @@ module.exports = (robot) ->
       # ボタンクリック後に置き換えられるattachmentを生成
       # これがoriginalのattachmentの置き換わり先になる
       slack.generateAttachment "good",
-        title: "#{text}"
+        title: "*#{text}*"
         text: "#{user.name} choice #{action.name}"
     # attachmentを送信
     slack.sendAttachment res.envelope.room, [at, at2]
@@ -124,7 +124,7 @@ module.exports = (robot) ->
       return @robot.logger.erro "err: #{inspect err, depth: null}" if err
       color = if body.status == '0' then 'good' else 'danger'
       message = body.program_message
-      at = slack.generateFieldAttachment color
-      text = "```\n#{message}\n```"
-      at.fields.push slack.generateField "result", text, false
+      at = slack.generateAttachment color
+        title: '*result*'
+        text: """```#{message}```"""
       slack.sendAttachment room, [at]
