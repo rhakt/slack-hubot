@@ -27,8 +27,6 @@ LIMIT = require '../data/limit'
 module.exports = (robot) ->
   return unless Slack.isSlackAdapter robot
   slack = new Slack robot
-  # test
-  slack2 = new Slack robot
 
   robot.respond /delete/g, (res)->
     slack.deleteMessage res.envelope.room, 100
@@ -73,12 +71,14 @@ module.exports = (robot) ->
       pretext: "outer"
       text: "inner"
     # 選択肢生成
-    text = 'wakame or random？'
+    option =
+      title: 'wakame or random？'
+      text: 'わかめを選ぶと、わかめが得られます. 趣を選ぶと、趣が得られます.'
     buttons = [
       ["わかめ", "wakame", "primary"],
       ["趣", "random", "danger"]
     ]
-    at2 = slack.generateChoice "button_test", "#3AA3E3", text, buttons, (user, action)->
+    at2 = slack.generateChoice "button_test", "#3AA3E3", buttons, option, (user, action)->
       # ここはボタンクリック時の動作設定
       message = switch action.value
         when "wakame" then "#{Util.random WAKAME.list}わかめ"
@@ -89,7 +89,7 @@ module.exports = (robot) ->
       # ボタンクリック後に置き換えられるattachmentを生成
       # これがoriginalのattachmentの置き換わり先になる
       slack.generateAttachment "good",
-        title: "#{text}"
+        title: option.title
         text: "#{user.name} choice #{action.name}"
     # attachmentを送信
     slack.sendAttachment res.envelope.room, [at, at2]
