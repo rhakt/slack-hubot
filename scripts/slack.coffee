@@ -29,9 +29,13 @@ module.exports = (robot) ->
   slack = new Slack robot
 
   slack.slash.on 'say', (option, cb)->
-    slack.say option.channel.id, "#{Util.random WAKAME.random}"
-    cb option.text,
-      response_type: "in_channel"
+    #slack.say option.channel.id, option.text
+    at = slack.generateAttachment 'good',
+      text: option.text
+      author_name: option.user.name
+    cb '',
+      #response_type: "in_channel"
+      attachments: [at]
 
   robot.respond /delete/g, (res)->
     slack.deleteMessage res.envelope.room, 100
