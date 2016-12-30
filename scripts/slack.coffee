@@ -30,7 +30,9 @@ module.exports = (robot) ->
 
   slack.slash.on 'say', (option)->
     slack.say option.channel.id, option.text
-    "say #{option.text}"
+    slack.say option.channel.id, option.text,
+      ephemeral: true
+    "#{Util.random WAKAME.random}"
 
   robot.respond /delete/g, (res)->
     slack.deleteMessage res.envelope.room, 100
