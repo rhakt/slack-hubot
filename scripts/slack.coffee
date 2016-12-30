@@ -38,11 +38,8 @@ module.exports = (robot) ->
       attachments: [at]
 
   slack.slash.on 'delete', (option, cb)->
-    cnt = slack.deleteMessage option.channel.id, 100
-    cb "deleted #{cnt} messages."
-
-  robot.respond /delete/g, (res)->
-    slack.deleteMessage res.envelope.room, 100
+    slack.deleteMessage option.channel.id, (cnt)->
+      cb "deleted #{cnt} messages."
 
   robot.hear /金曜日/g, (res)->
     mes = res.envelope.message
