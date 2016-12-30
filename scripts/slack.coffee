@@ -30,7 +30,7 @@ module.exports = (robot) ->
 
   slack.slash.on 'say', (option)->
     slack.say option.channel.id, option.text
-    "say #{text}"
+    "say #{option.text}"
 
   robot.respond /delete/g, (res)->
     slack.deleteMessage res.envelope.room, 100
