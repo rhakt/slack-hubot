@@ -37,6 +37,10 @@ module.exports = (robot) ->
       #response_type: "in_channel"
       attachments: [at]
 
+  slack.slash.on 'delete', (option, cb)->
+    cnt = slack.deleteMessage option.channel.id, 100
+    cb "deleted #{cnt} messages."
+
   robot.respond /delete/g, (res)->
     slack.deleteMessage res.envelope.room, 100
 
