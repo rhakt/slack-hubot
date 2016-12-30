@@ -28,11 +28,10 @@ module.exports = (robot) ->
   return unless Slack.isSlackAdapter robot
   slack = new Slack robot
 
-  slack.slash.on 'say', (option)->
-    slack.say option.channel.id, option.text
-    slack.say option.channel.id, option.text,
-      ephemeral: true
-    "#{Util.random WAKAME.random}"
+  slack.slash.on 'say', (option, cb)->
+    slack.say option.channel.id, "#{Util.random WAKAME.random}"
+    cb option.text,
+      response_type: "in_channel"
 
   robot.respond /delete/g, (res)->
     slack.deleteMessage res.envelope.room, 100
