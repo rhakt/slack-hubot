@@ -28,6 +28,10 @@ module.exports = (robot) ->
   return unless Slack.isSlackAdapter robot
   slack = new Slack robot
 
+  slack.slash.on 'say', (option)->
+    slack.say option.channel.id, option.text
+    "say #{text}"
+
   robot.respond /delete/g, (res)->
     slack.deleteMessage res.envelope.room, 100
 
