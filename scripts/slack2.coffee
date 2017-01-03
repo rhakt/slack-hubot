@@ -46,3 +46,6 @@ module.exports = (robot) ->
         text: "#{res.text}"
         author_name: "#{res.userName}"
       slack.sendAttachment channel, [at]
+
+  robot.respond /sudo delete$/g, (res)->
+    slack.__deleteMessage res.envelope.message.room, 100
