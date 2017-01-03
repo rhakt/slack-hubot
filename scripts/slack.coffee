@@ -26,7 +26,7 @@ LIMIT = require '../data/limit'
 
 module.exports = (robot) ->
   return unless Slack.isSlackAdapter robot
-  slack = new Slack robot
+  slack = Slack.getInstance robot
 
   slack.slash.on 'say', (option, cb)->
     #slack.say option.channel.id, option.text

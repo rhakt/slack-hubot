@@ -26,7 +26,7 @@ LIMIT = require '../data/limit'
 
 module.exports = (robot) ->
   return unless Slack.isSlackAdapter robot
-  slack = new Slack robot
+  slack = Slack.getInstance robot
 
   slack.on 'star_added', (ev, user, channel, item)->
     return if user.name == robot.name
