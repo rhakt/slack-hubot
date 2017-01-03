@@ -33,9 +33,14 @@ module.exports = (robot) ->
     at = slack.generateAttachment 'good',
       text: option.text
       author_name: option.user.name
-    cb '',
-      #response_type: "in_channel"
-      attachments: [at]
+    cb attachments: [at]
+
+  slack.slash.on 'say2', (option, cb)->
+    #slack.say option.channel.id, option.text
+    at = slack.generateAttachment 'good',
+      text: option.text
+      author_name: option.user.name
+    cb response_type: "in_channel", attachments: [at]
 
   slack.slash.on 'delete', (option, cb)->
     slack.deleteMessage option.channel.id, 100, (cnt)->
