@@ -21,6 +21,6 @@
     "local": "EXPRESS_STATIC=public ./bin/hubot -a shell -n parrot"
   },
   "engines": {
-    "node": "0.10.x"
+    "node": "6.9.3"
   }
 }
