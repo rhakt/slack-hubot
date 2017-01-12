@@ -45,8 +45,11 @@ module.exports = (robot) ->
     res.send "#{Util.random WAKAME.joke}"
 
   robot.hear /.*/i, (res)->
-    return if Math.random() < 0.98
+    return if Math.random() < 0.97
     res.send Util.random WAKAME.random
+
+  robot.hear /紀貫之/i, (res)->
+    res.send Util.random WAKAME.waka
 
   robot.respond /image/i, (res)->
     query = qs.stringify timestamp: new Date().getTime()
