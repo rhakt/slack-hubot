@@ -28,6 +28,7 @@ module.exports = (robot) ->
   return unless Slack.isSlackAdapter robot
   slack = Slack.getInstance robot
 
+  ###
   slack.on 'star_added', (ev, user, channel, item)->
     return if user.name == robot.name
     link = item.message.permalink
@@ -46,6 +47,7 @@ module.exports = (robot) ->
         text: "#{res.text}"
         author_name: "#{res.userName}"
       slack.sendAttachment channel, [at]
+  ###
 
   robot.respond /owarigakimasu/i, (res)->
     robot.logger.info "owarigakimasu"

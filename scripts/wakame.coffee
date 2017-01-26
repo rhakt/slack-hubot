@@ -32,8 +32,9 @@ LIMIT = require '../data/limit'
 
 module.exports = (robot) ->
   robot.hear /卒論$/g, (res)->
-    d = timediff new Date(), new Date(LIMIT.thesis)
-    res.send "卒論まであと#{d}日！"
+    d = timediff new Date(), new Date(LIMIT.thesis), 'day'
+    h = timediff new Date(), new Date(LIMIT.thesis), 'hour'
+    res.send "卒論まであと#{d}日と#{h%24}時間！"
 
   robot.hear /wakame$/i, (res) ->
     res.send "#{Util.random WAKAME.list}わかめ"
