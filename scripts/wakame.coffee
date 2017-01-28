@@ -36,6 +36,9 @@ module.exports = (robot) ->
     h = timediff new Date(), new Date(LIMIT.thesis), 'hour'
     res.send "卒論まであと#{d}日と#{h%24}時間！"
 
+  robot.respond /人間ですか？/g, (res)->
+    res.send "人間です。"
+
   robot.hear /wakame$/i, (res) ->
     res.send "#{Util.random WAKAME.list}わかめ"
 
