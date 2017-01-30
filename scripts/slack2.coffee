@@ -49,24 +49,23 @@ module.exports = (robot) ->
       slack.sendAttachment channel, [at]
   ###
 
-  slack.on 'message', (ev, user, channel, item)->
-    res = /(人間|感情|終わり)/i.match item.text
+  slack.on 'message', (ev, user, channel)->
+    res = /(人間|感情|終わり)/i.match ev.text
     return unless res
     msg = res.match[1]
-    ts = if item.thread_ts? then item.thread_ts else item.ts
+    ts = if ev.thread_ts? then ev.thread_ts else ev.ts
     options =
       thread_ts: ts
       reply_broadcast: false
     slack.say channel, msg, options
 
-  ###
   robot.hear /(人間|感情|終わり)/i, (res)->
-    msg = res.match[1]
-    options =
-      thread_ts: res.envelope.message.id
-      reply_broadcast: true
-    slack.say res.envelope.message.room, msg, options
-  ###
+    console.log res.envelope
+    #msg = res.match[1]
+    #options =
+    #  thread_ts: res.envelope.message.id
+    #  reply_broadcast: true
+    #slack.say res.envelope.message.room, msg, options
 
   robot.respond /upload (.+)/i, (res)->
     filename = "#{new Date().getTime()}.txt"
