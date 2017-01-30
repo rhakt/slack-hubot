@@ -49,6 +49,13 @@ module.exports = (robot) ->
       slack.sendAttachment channel, [at]
   ###
 
+  robot.respond /upload (.+)/i, (res)->
+    filename = "#{new Date().getTime()}.txt"
+    title = "終わりが来ます"
+    text = res.match[1]
+    channel = res.envelope.message.room
+    slack.plainTextUpload filename, title, text, channel
+
   robot.respond /owarigakimasu/i, (res)->
     robot.logger.info "owarigakimasu"
     slack.__deleteMessage res.envelope.message.room, 100
