@@ -57,10 +57,12 @@ module.exports = (robot) ->
     options =
       thread_ts: ts
       reply_broadcast: false
-    slack.say channel, msg, options
+    console.log "user.name: #{user.name}"
+    console.log "robot.name: #{robot.name}"
+    #slack.say channel, msg, options
 
   robot.hear /(人間|感情|終わり)/i, (res)->
-    console.log res.envelope
+    robot.logger.info "#{inspect res.envelope}"
     #msg = res.match[1]
     #options =
     #  thread_ts: res.envelope.message.id
