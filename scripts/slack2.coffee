@@ -49,7 +49,7 @@ module.exports = (robot) ->
       slack.sendAttachment channel, [at]
   ###
 
-  horobi = (ev, user, channel, item)->
+  slack.on 'message', (ev, user, channel, item)->
     res = /(人間|感情|終わり)/i.match item.text
     return unless res
     msg = res.match[1]
@@ -58,10 +58,6 @@ module.exports = (robot) ->
       thread_ts: ts
       reply_broadcast: false
     slack.say channel, msg, options
-
-  slack.on 'message.channels', horobi
-  slack.on 'message.groups', horobi
-  slack.on 'message.im', horobi
 
   ###
   robot.hear /(人間|感情|終わり)/i, (res)->
