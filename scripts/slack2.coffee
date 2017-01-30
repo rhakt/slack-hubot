@@ -49,6 +49,13 @@ module.exports = (robot) ->
       slack.sendAttachment channel, [at]
   ###
 
+  robot.hear /(人間|感情|終わり)/i, (res)->
+    msg = res.match[1]
+    options =
+      thread_ts: res.envelope.message.id
+      reply_broadcast: true
+    slack.say res.envelope.message.room, msg, options
+
   robot.respond /upload (.+)/i, (res)->
     filename = "#{new Date().getTime()}.txt"
     title = "終わりが来ます"
