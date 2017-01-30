@@ -51,6 +51,7 @@ module.exports = (robot) ->
 
   slack.on 'message', (ev, user, channel)->
     return if ev.subtype?
+    return if user.name == robot.name
     res = /(人間|感情|終わり)/i.exec ev.text
     return unless res
     msg = res[1]
@@ -58,9 +59,7 @@ module.exports = (robot) ->
     options =
       thread_ts: ts
       reply_broadcast: false
-    robot.logger.info "user.name: #{user.name}"
-    robot.logger.info "robot.name: #{robot.name}"
-    #slack.say channel, msg, options
+    slack.say channel, msg, options
 
   ###
   robot.hear /(人間|感情|終わり)/i, (res)->
@@ -70,7 +69,7 @@ module.exports = (robot) ->
     #  reply_broadcast: true
     #slack.say res.envelope.message.room, msg, options
   ###
-  
+
   robot.respond /upload (.+)/i, (res)->
     filename = "#{new Date().getTime()}.txt"
     title = "終わりが来ます"
