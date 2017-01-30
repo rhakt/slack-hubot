@@ -50,7 +50,7 @@ module.exports = (robot) ->
   ###
 
   slack.on 'message', (ev, user, channel)->
-    res = /(人間|感情|終わり)/i.match ev.text
+    res = /(人間|感情|終わり)/i.exec ev.text
     return unless res
     msg = res.match[1]
     ts = if ev.thread_ts? then ev.thread_ts else ev.ts
