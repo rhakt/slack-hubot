@@ -49,12 +49,28 @@ module.exports = (robot) ->
       slack.sendAttachment channel, [at]
   ###
 
+  horobi = (ev, user, channel, item)->
+    res = /(人間|感情|終わり)/i.match item.text
+    return unless res
+    msg = res.match[1]
+    ts = if item.thread_ts? then item.thread_ts else item.ts
+    options =
+      thread_ts: ts
+      reply_broadcast: false
+    slack.say channel, msg, options
+
+  slack.on 'message.channels', horobi
+  slack.on 'message.groups', horobi
+  slack.on 'message.im', horobi
+
+  ###
   robot.hear /(人間|感情|終わり)/i, (res)->
     msg = res.match[1]
     options =
       thread_ts: res.envelope.message.id
       reply_broadcast: true
     slack.say res.envelope.message.room, msg, options
+  ###
 
   robot.respond /upload (.+)/i, (res)->
     filename = "#{new Date().getTime()}.txt"
