@@ -35,7 +35,8 @@ module.exports = (robot) ->
     slack.on 'message', (ev, user, channel)->
       return if ev.subtype?
       return if user.name == robot.name
-      for {reg, cb} in replyList
+      for e in replyList
+        {reg, cb} = e
         res = reg.exec ev.text
         if res
           msg = cb res
