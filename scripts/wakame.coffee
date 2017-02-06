@@ -28,6 +28,7 @@ Util = require '../lib/util'
 # data
 WAKAME = require '../data/wakame'
 LIMIT = require '../data/limit'
+SOUMU = "#{process.env.SOUMU}".split ','
 
 
 module.exports = (robot) ->
@@ -44,6 +45,9 @@ module.exports = (robot) ->
 
   robot.hear /random$/i, (res) ->
     res.send "#{Util.random WAKAME.random}"
+
+  robot.hear /総務$/i, (res) ->
+    res.send ":fastparrot: 次の総務は〜〜 :point_right: #{Util.random SOUMU}"
 
   robot.hear /joke$/i, (res)->
     res.send "#{Util.random WAKAME.joke}"
