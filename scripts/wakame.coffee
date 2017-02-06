@@ -47,7 +47,10 @@ module.exports = (robot) ->
     res.send "#{Util.random WAKAME.random}"
 
   robot.hear /総務$/i, (res) ->
-    res.send ":fastparrot: 次の総務は〜〜 :point_right: #{Util.random SOUMU}"
+    if Math.random() < 0.9
+      res.send ":fastparrot: 次の総務は〜〜 :point_right: #{Util.random SOUMU}"
+    else
+      res.send "お前"
 
   robot.hear /joke$/i, (res)->
     res.send "#{Util.random WAKAME.joke}"
