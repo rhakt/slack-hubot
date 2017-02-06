@@ -35,8 +35,7 @@ module.exports = (robot) ->
     slack.on 'message', (ev, user, channel)->
       return if ev.subtype?
       return if user.name == robot.name
-      for e in replyList
-        {reg, cb} = e
+      for {reg, cb} in replyList
         res = reg.exec ev.text
         if res
           msg = cb res
@@ -46,7 +45,7 @@ module.exports = (robot) ->
             reply_broadcast: false
           slack.say channel, msg, options
           break
-    (reg, cb)-> replyList.push [reg, cb]
+    (reg, cb)-> replyList.push {reg: reg, cb: cb}
 
   registerReply /(人間|感情|終わり)/i, (match)-> match[1]
 
